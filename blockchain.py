@@ -4,11 +4,11 @@ import time
 from pathlib import Path
 
 class Block:
-    def __init__(self, index, timestamp, transactions, prev_hash, nonce = 0):
+    def __init__(self, index, timestamp, transactions, previous_hash, nonce = 0):
         self.index = index
         self.timestamp = timestamp
         self.transactions = transactions
-        self.previous_hash = prev_hash
+        self.previous_hash = previous_hash
         self.nonce = nonce
         self.hash = self.compute_hash()
 
@@ -18,7 +18,7 @@ class Block:
             "index": self.index,
             "timestamp": self.timestamp,
             "transactions": self.transactions,
-            "previous_hash": self.prev_hash,
+            "previous_hash": self.previous_hash,
             "nonce": self.nonce
         }
         block_string = json.dumps(block_content,sort_keys=True)
@@ -30,7 +30,7 @@ class Block:
             "index": self.index,
             "timestamp": self.timestamp,
             "transactions": self.transactions,
-            "previous_hash": self.prev_hash,
+            "previous_hash": self.previous_hash,
             "nonce": self.nonce,
             "hash": self.hash
         }
