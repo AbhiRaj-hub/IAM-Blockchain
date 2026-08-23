@@ -1,7 +1,7 @@
 import hashlib
 import json
 import time
-import pathlib from Path 
+from pathlib import Path
 
 class Block:
     def __init__(self, index, timestamp, transactions, prev_hash, nonce = 0):
