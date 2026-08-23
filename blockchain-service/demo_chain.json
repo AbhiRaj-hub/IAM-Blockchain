@@ -1,0 +1,272 @@
+[
+  {
+    "index": 0,
+    "timestamp": 1787484206.6729968,
+    "transactions": [],
+    "previous_hash": "0",
+    "nonce": 0,
+    "hash": "87de0da7d001bfaaea1976c32b933e4e31580f1902a3880b2e5d3ff4b18cd4f9"
+  },
+  {
+    "index": 1,
+    "timestamp": 1787484584.1938581,
+    "transactions": [
+      {
+        "type": "IDENTITY_ISSUE",
+        "timestamp": 1787484584.1938581,
+        "payload": {
+          "credential_id": "cred-21b2a6ce42",
+          "did": "did:bel:d0ab08a3ffd242089d0aaa9488c1efe2",
+          "subject_name": "R. Sharma",
+          "role": "engineer",
+          "clearance_level": 3,
+          "issuer": "BEL-Authority",
+          "status": "ACTIVE"
+        }
+      }
+    ],
+    "previous_hash": "87de0da7d001bfaaea1976c32b933e4e31580f1902a3880b2e5d3ff4b18cd4f9",
+    "nonce": 8484,
+    "hash": "00005ca288c0e6a00d3796d9ab1a942b00585bb5065e828d52e0d79abdcdf5f5"
+  },
+  {
+    "index": 2,
+    "timestamp": 1787484904.048981,
+    "transactions": [
+      {
+        "type": "IDENTITY_ISSUE",
+        "timestamp": 1787484904.048981,
+        "payload": {
+          "credential_id": "cred-1c7b64f54b",
+          "did": "did:bel:68d6a78b13864c6ca2913fe7e9c430d8",
+          "subject_name": "R. Sharma",
+          "role": "engineer",
+          "clearance_level": 3,
+          "issuer": "BEL-Authority",
+          "status": "ACTIVE"
+        }
+      }
+    ],
+    "previous_hash": "00005ca288c0e6a00d3796d9ab1a942b00585bb5065e828d52e0d79abdcdf5f5",
+    "nonce": 62167,
+    "hash": "00004547bcb7e8d3d6f4f2cfcd57292d72ecc2c5344097cc8007b9ce74cc29d8"
+  },
+  {
+    "index": 3,
+    "timestamp": 1787484983.2414439,
+    "transactions": [
+      {
+        "type": "IDENTITY_ISSUE",
+        "timestamp": 1787484983.2414439,
+        "payload": {
+          "credential_id": "cred-2fe46759e4",
+          "did": "did:bel:4f860ced15b04b8fbd089590162b1d09",
+          "subject_name": "R. Sharma",
+          "role": "engineer",
+          "clearance_level": 3,
+          "issuer": "BEL-Authority",
+          "status": "ACTIVE"
+        }
+      }
+    ],
+    "previous_hash": "00004547bcb7e8d3d6f4f2cfcd57292d72ecc2c5344097cc8007b9ce74cc29d8",
+    "nonce": 122518,
+    "hash": "000092744e8da89cac7022e95b88c455ecc55c6c65761d9fe43df58250c7a073"
+  },
+  {
+    "index": 4,
+    "timestamp": 1787485214.2456946,
+    "transactions": [
+      {
+        "type": "IDENTITY_ISSUE",
+        "timestamp": 1787485214.2456946,
+        "payload": {
+          "credential_id": "cred-7a16153d9c",
+          "did": "did:bel:7a40f1d77f9546358f1901abaca522c3",
+          "subject_name": "R. Sharma",
+          "role": "engineer",
+          "clearance_level": 3,
+          "issuer": "BEL-Authority",
+          "status": "ACTIVE"
+        }
+      }
+    ],
+    "previous_hash": "000092744e8da89cac7022e95b88c455ecc55c6c65761d9fe43df58250c7a073",
+    "nonce": 15995,
+    "hash": "00002c63b3b0f569e1ff0323dd5c826320cad4edc28c741a209a3aaede1cdb93"
+  },
+  {
+    "index": 5,
+    "timestamp": 1787485214.4143138,
+    "transactions": [
+      {
+        "type": "ACCESS_GRANT",
+        "timestamp": 1787485214.4143138,
+        "payload": {
+          "grant_id": "grant-e752fe13a8",
+          "did": "did:bel:7a40f1d77f9546358f1901abaca522c3",
+          "resource": "lab-3-restricted-docs",
+          "required_clearance": 3,
+          "granted_by": "BEL-Authority"
+        }
+      }
+    ],
+    "previous_hash": "00002c63b3b0f569e1ff0323dd5c826320cad4edc28c741a209a3aaede1cdb93",
+    "nonce": 79340,
+    "hash": "000044e2f25298ead5570e07f387ab4171b31d7ae2f8f2e699cd6285bede1e38"
+  },
+  {
+    "index": 6,
+    "timestamp": 1787485215.2331896,
+    "transactions": [
+      {
+        "type": "ACCESS_ATTEMPT",
+        "timestamp": 1787485215.2331896,
+        "payload": {
+          "did": "did:bel:7a40f1d77f9546358f1901abaca522c3",
+          "resource": "lab-3-restricted-docs",
+          "decision": "ALLOWED"
+        }
+      }
+    ],
+    "previous_hash": "000044e2f25298ead5570e07f387ab4171b31d7ae2f8f2e699cd6285bede1e38",
+    "nonce": 84107,
+    "hash": "0000b26a8cea1b4601e99e2620f5ee35c819b3d2fad3c9fa2da465fb2bd3c31f"
+  },
+  {
+    "index": 7,
+    "timestamp": 1787485215.9837737,
+    "transactions": [
+      {
+        "type": "ASSET_ANCHOR",
+        "timestamp": 1787485215.9837737,
+        "payload": {
+          "asset_id": "asset-e47ab30bea",
+          "filename": "blueprint_v1.pdf",
+          "version": 1,
+          "sha256": "c298785fa0c996d4e00478fc841f83bb89eb7eba76ef2874464057ac1fdead91",
+          "owner_did": "did:bel:7a40f1d77f9546358f1901abaca522c3"
+        }
+      }
+    ],
+    "previous_hash": "0000b26a8cea1b4601e99e2620f5ee35c819b3d2fad3c9fa2da465fb2bd3c31f",
+    "nonce": 4151,
+    "hash": "000015a9d157dfeb6d197bdfeac54b8589d7c5d46fe16192d9e010ee774fd1eb"
+  },
+  {
+    "index": 8,
+    "timestamp": 1787485216.0272539,
+    "transactions": [
+      {
+        "type": "IDENTITY_REVOKE",
+        "timestamp": 1787485216.0272539,
+        "payload": {
+          "did": "did:bel:7a40f1d77f9546358f1901abaca522c3",
+          "reason": "Employee offboarded",
+          "issuer": "BEL-Authority"
+        }
+      }
+    ],
+    "previous_hash": "000015a9d157dfeb6d197bdfeac54b8589d7c5d46fe16192d9e010ee774fd1eb",
+    "nonce": 18363,
+    "hash": "00000850a9fce8d28aafb556cf20487eb927c1b4176315030cdb14db6db152b4"
+  },
+  {
+    "index": 9,
+    "timestamp": 1787485229.4850233,
+    "transactions": [
+      {
+        "type": "IDENTITY_ISSUE",
+        "timestamp": 1787485229.4850233,
+        "payload": {
+          "credential_id": "cred-8f64a034b1",
+          "did": "did:bel:5c4329c4ee6e4a1081516ede439b8115",
+          "subject_name": "R. Sharma",
+          "role": "engineer",
+          "clearance_level": 3,
+          "issuer": "BEL-Authority",
+          "status": "ACTIVE"
+        }
+      }
+    ],
+    "previous_hash": "00000850a9fce8d28aafb556cf20487eb927c1b4176315030cdb14db6db152b4",
+    "nonce": 2776,
+    "hash": "0000661cee816c298c1690ac782833a0cf53abaf4658af0ccd249ea0b1481325"
+  },
+  {
+    "index": 10,
+    "timestamp": 1787485229.5180352,
+    "transactions": [
+      {
+        "type": "ACCESS_GRANT",
+        "timestamp": 1787485229.5180352,
+        "payload": {
+          "grant_id": "grant-8f4ee0c62c",
+          "did": "did:bel:5c4329c4ee6e4a1081516ede439b8115",
+          "resource": "lab-3-restricted-docs",
+          "required_clearance": 3,
+          "granted_by": "BEL-Authority"
+        }
+      }
+    ],
+    "previous_hash": "0000661cee816c298c1690ac782833a0cf53abaf4658af0ccd249ea0b1481325",
+    "nonce": 67894,
+    "hash": "0000e9b998a343241339ffcb1ac70d4ac90d1e954dd325a195aaa0853dda9cd3"
+  },
+  {
+    "index": 11,
+    "timestamp": 1787485230.1785414,
+    "transactions": [
+      {
+        "type": "ACCESS_ATTEMPT",
+        "timestamp": 1787485230.1785414,
+        "payload": {
+          "did": "did:bel:5c4329c4ee6e4a1081516ede439b8115",
+          "resource": "lab-3-restricted-docs",
+          "decision": "ALLOWED"
+        }
+      }
+    ],
+    "previous_hash": "0000e9b998a343241339ffcb1ac70d4ac90d1e954dd325a195aaa0853dda9cd3",
+    "nonce": 136354,
+    "hash": "00004b044ba0316b7fcbd9723bcbd4a361ad0a128127cdba669daa083ba1def8"
+  },
+  {
+    "index": 12,
+    "timestamp": 1787485231.4501178,
+    "transactions": [
+      {
+        "type": "ASSET_ANCHOR",
+        "timestamp": 1787485231.4501178,
+        "payload": {
+          "asset_id": "asset-228875fa58",
+          "filename": "blueprint_v1.pdf",
+          "version": 1,
+          "sha256": "c298785fa0c996d4e00478fc841f83bb89eb7eba76ef2874464057ac1fdead91",
+          "owner_did": "did:bel:5c4329c4ee6e4a1081516ede439b8115"
+        }
+      }
+    ],
+    "previous_hash": "00004b044ba0316b7fcbd9723bcbd4a361ad0a128127cdba669daa083ba1def8",
+    "nonce": 78005,
+    "hash": "0000473dc25abfd74a1d5f3419c6c4b427e433c2b8479b3f9f58f29ae16673e7"
+  },
+  {
+    "index": 13,
+    "timestamp": 1787485232.2714512,
+    "transactions": [
+      {
+        "type": "IDENTITY_REVOKE",
+        "timestamp": 1787485232.2714512,
+        "payload": {
+          "did": "did:bel:5c4329c4ee6e4a1081516ede439b8115",
+          "reason": "Employee offboarded",
+          "issuer": "BEL-Authority"
+        }
+      }
+    ],
+    "previous_hash": "0000473dc25abfd74a1d5f3419c6c4b427e433c2b8479b3f9f58f29ae16673e7",
+    "nonce": 42646,
+    "hash": "0000f32a0d7e8b72d5c72fe10cdfe80600e36167791321151d9a5fb979dd79df"
+  }
+]

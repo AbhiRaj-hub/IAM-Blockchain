@@ -1,14 +1,14 @@
 import hashlib
 import json
 import time
-import pathlib from Path 
+from pathlib import Path
 
 class Block:
-    def __init__(self, index, timestamp, transactions, prev_hash, nonce = 0):
+    def __init__(self, index, timestamp, transactions, previous_hash, nonce = 0):
         self.index = index
         self.timestamp = timestamp
         self.transactions = transactions
-        self.previous_hash = prev_hash
+        self.previous_hash = previous_hash
         self.nonce = nonce
         self.hash = self.compute_hash()
 
@@ -18,7 +18,7 @@ class Block:
             "index": self.index,
             "timestamp": self.timestamp,
             "transactions": self.transactions,
-            "previous_hash": self.prev_hash,
+            "previous_hash": self.previous_hash,
             "nonce": self.nonce
         }
         block_string = json.dumps(block_content,sort_keys=True)
@@ -30,7 +30,7 @@ class Block:
             "index": self.index,
             "timestamp": self.timestamp,
             "transactions": self.transactions,
-            "previous_hash": self.prev_hash,
+            "previous_hash": self.previous_hash,
             "nonce": self.nonce,
             "hash": self.hash
         }
@@ -65,7 +65,7 @@ class Blockchain:
 
 
     def _create_genesis_block(self):
-        genesis = Block(index = 0, timestamp = time.time(), transactions = [], previous_hash = '0'):
+        genesis = Block(index = 0, timestamp = time.time(), transactions = [], previous_hash = '0')
         genesis.hash = genesis.compute_hash()
         self.chain.append(genesis)
 
@@ -87,7 +87,7 @@ class Blockchain:
         self.pending_transactions.append(transaction)
 
 
-    def mine_pending_transaction(self) -> Block:
+    def mine_pending_transactions(self) -> Block:
         if not self.pending_transactions:
             raise ValueError("No pending transactions to mine")
 
