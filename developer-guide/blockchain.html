@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Blockchain Guide | Developer Guide</title>
+  <link rel="stylesheet" href="css/guide.css" />
+</head>
+<body>
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">SX</div>
+      <div class="guide-title">SIH-2026 Dev Guide</div>
+    </div>
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Introduction</li>
+      <li class="guide-nav-item"><a href="index.html" class="guide-nav-link">1. Overview & Goals</a></li>
+      <li class="guide-nav-item"><a href="architecture.html" class="guide-nav-link">2. Architecture</a></li>
+      <li class="guide-nav-item"><a href="setup.html" class="guide-nav-link">3. Zero-to-One Setup</a></li>
+      <li class="guide-nav-header">Core Concepts</li>
+      <li class="guide-nav-item"><a href="backend.html" class="guide-nav-link">4. Node/Express Backend</a></li>
+      <li class="guide-nav-item"><a href="frontend.html" class="guide-nav-link">5. Vanilla JS Frontend</a></li>
+      <li class="guide-nav-item"><a href="mongodb.html" class="guide-nav-link">6. MongoDB Atlas Mirror</a></li>
+      <li class="guide-nav-item"><a href="blockchain.html" class="guide-nav-link active">7. Python Blockchain</a></li>
+      <li class="guide-nav-header">Security & Deep Dives</li>
+      <li class="guide-nav-item"><a href="api.html" class="guide-nav-link">8. REST API Reference</a></li>
+      <li class="guide-nav-item"><a href="authentication.html" class="guide-nav-link">9. Bcrypt & JWT Auth</a></li>
+      <li class="guide-nav-item"><a href="access-control.html" class="guide-nav-link">10. Clearance & RBAC</a></li>
+      <li class="guide-nav-item"><a href="assets.html" class="guide-nav-link">11. SHA-256 Asset Integrity</a></li>
+      <li class="guide-nav-item"><a href="troubleshooting.html" class="guide-nav-link">12. Troubleshooting</a></li>
+    </ul>
+  </aside>
+
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>7. Python Blockchain Service</h1>
+
+      <h2>What is a Blockchain?</h2>
+      <p>
+        A blockchain is an append-only chain of blocks where each block contains:
+      </p>
+      <ul>
+        <li><code>index</code>: Sequential block height (0 = Genesis).</li>
+        <li><code>timestamp</code>: Unix timestamp of when the block was created.</li>
+        <li><code>transactions</code>: List of state changes (DID issuance, Access Grants, Hashes).</li>
+        <li><code>previous_hash</code>: Cryptographic hash of the preceding block.</li>
+        <li><code>nonce</code>: Proof-of-Work counter.</li>
+        <li><code>hash</code>: SHA-256 digest of all block contents.</li>
+      </ul>
+
+      <h2>Why Is It Hard to Tamper with Previous Blocks?</h2>
+      <p>
+        Because Block #3 contains the hash of Block #2: if an attacker modifies data in Block #2, Block #2's hash changes. This breaks the link in Block #3, Block #4, and so on. The cryptographic integrity check <code>chain.is_chain_valid()</code> immediately detects this break!
+      </p>
+
+      <h2>Python Blockchain Structure</h2>
+      <ul>
+        <li><code>blockchain.py</code>: Implements <code>Block</code>, <code>Blockchain</code>, Proof-of-Work mining, and <code>is_chain_valid()</code>.</li>
+        <li><code>models.py</code>: Transaction factory functions for <code>IDENTITY_ISSUE</code>, <code>ACCESS_ATTEMPT</code>, <code>ASSET_ANCHOR</code>, etc.</li>
+        <li><code>api.py</code>: Flask REST API microservice running on port <code>5001</code>.</li>
+      </ul>
+
+      <h2>Why Don't We Store Large Files On-Chain?</h2>
+      <p>
+        Blockchains are designed for small, high-value consensus transactions. Storing 100MB video/PDF files directly on-chain creates massive bloat. Instead, we store files in off-chain disk storage and record only their <strong>32-byte SHA-256 hash</strong> on-chain!
+      </p>
+
+      <div class="guide-pagination">
+        <a href="mongodb.html" class="page-btn">⬅ 6. MongoDB Atlas Guide</a>
+        <a href="api.html" class="page-btn">8. REST API Reference ➔</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

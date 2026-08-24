@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REST API Reference | Developer Guide</title>
+  <link rel="stylesheet" href="css/guide.css" />
+</head>
+<body>
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">SX</div>
+      <div class="guide-title">SIH-2026 Dev Guide</div>
+    </div>
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Introduction</li>
+      <li class="guide-nav-item"><a href="index.html" class="guide-nav-link">1. Overview & Goals</a></li>
+      <li class="guide-nav-item"><a href="architecture.html" class="guide-nav-link">2. Architecture</a></li>
+      <li class="guide-nav-item"><a href="setup.html" class="guide-nav-link">3. Zero-to-One Setup</a></li>
+      <li class="guide-nav-header">Core Concepts</li>
+      <li class="guide-nav-item"><a href="backend.html" class="guide-nav-link">4. Node/Express Backend</a></li>
+      <li class="guide-nav-item"><a href="frontend.html" class="guide-nav-link">5. Vanilla JS Frontend</a></li>
+      <li class="guide-nav-item"><a href="mongodb.html" class="guide-nav-link">6. MongoDB Atlas Mirror</a></li>
+      <li class="guide-nav-item"><a href="blockchain.html" class="guide-nav-link">7. Python Blockchain</a></li>
+      <li class="guide-nav-header">Security & Deep Dives</li>
+      <li class="guide-nav-item"><a href="api.html" class="guide-nav-link active">8. REST API Reference</a></li>
+      <li class="guide-nav-item"><a href="authentication.html" class="guide-nav-link">9. Bcrypt & JWT Auth</a></li>
+      <li class="guide-nav-item"><a href="access-control.html" class="guide-nav-link">10. Clearance & RBAC</a></li>
+      <li class="guide-nav-item"><a href="assets.html" class="guide-nav-link">11. SHA-256 Asset Integrity</a></li>
+      <li class="guide-nav-item"><a href="troubleshooting.html" class="guide-nav-link">12. Troubleshooting</a></li>
+    </ul>
+  </aside>
+
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>8. REST API Endpoint Reference</h1>
+
+      <h2>1. Authentication Endpoints</h2>
+      <table class="guide-table">
+        <thead>
+          <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>POST</code></td><td><code>/api/auth/register</code></td><td>Public</td><td>Register new user</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/auth/login</code></td><td>Public</td><td>Login & get JWT token</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/auth/me</code></td><td>Bearer JWT</td><td>Get current profile</td></tr>
+        </tbody>
+      </table>
+
+      <h2>2. Identity (DID) Endpoints</h2>
+      <table class="guide-table">
+        <thead>
+          <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>GET</code></td><td><code>/api/identity</code></td><td>Bearer JWT</td><td>List all issued DIDs</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/identity</code></td><td>Admin</td><td>Issue on-chain DID credential</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/identity/:did/revoke</code></td><td>Admin</td><td>Revoke DID on-chain</td></tr>
+        </tbody>
+      </table>
+
+      <h2>3. Clearance & Access Control Endpoints</h2>
+      <table class="guide-table">
+        <thead>
+          <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>POST</code></td><td><code>/api/access/request</code></td><td>Bearer JWT</td><td>Clearance check & on-chain audit log</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/access/grant</code></td><td>Admin</td><td>Anchor explicit permission grant</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/access/revoke</code></td><td>Admin</td><td>Revoke permission grant</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/access</code></td><td>Admin/Auditor</td><td>List all active grants</td></tr>
+        </tbody>
+      </table>
+
+      <h2>4. Digital Asset & SHA-256 Endpoints</h2>
+      <table class="guide-table">
+        <thead>
+          <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>POST</code></td><td><code>/api/assets/upload</code></td><td>Bearer JWT</td><td>Upload file & anchor SHA-256 to blockchain</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/assets</code></td><td>Bearer JWT</td><td>List all anchored assets</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/assets/:id/verify</code></td><td>Bearer JWT</td><td>Verify file on disk against blockchain hash</td></tr>
+          <tr><td><code>POST</code></td><td><code>/api/assets/:id/tamper-demo</code></td><td>Admin</td><td>Simulate 1-byte file modification for demo</td></tr>
+        </tbody>
+      </table>
+
+      <h2>5. Audit & Blockchain Telemetry</h2>
+      <table class="guide-table">
+        <thead>
+          <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>GET</code></td><td><code>/api/audit</code></td><td>Admin/Auditor</td><td>Get indexed audit log & raw chain txs</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/audit/stats</code></td><td>Bearer JWT</td><td>Dashboard counters & chain height</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/blockchain/status</code></td><td>Bearer JWT</td><td>Run cryptographic chain integrity validation</td></tr>
+          <tr><td><code>GET</code></td><td><code>/api/health</code></td><td>Public</td><td>System health check</td></tr>
+        </tbody>
+      </table>
+
+      <div class="guide-pagination">
+        <a href="blockchain.html" class="page-btn">⬅ 7. Blockchain Guide</a>
+        <a href="authentication.html" class="page-btn">9. Bcrypt & JWT Auth ➔</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

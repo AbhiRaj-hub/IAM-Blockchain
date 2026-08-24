@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero-to-One Local Laptop Setup | ShieldX Dev Guide</title>
+  <link rel="stylesheet" href="css/guide.css" />
+</head>
+<body>
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">SX</div>
+      <div class="guide-title">ShieldX Dev Guide</div>
+    </div>
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Architecture & Design</li>
+      <li class="guide-nav-item"><a href="index.html" class="guide-nav-link">1. System Overview</a></li>
+      <li class="guide-nav-item"><a href="architecture.html" class="guide-nav-link">2. 3-Tier Architecture</a></li>
+      <li class="guide-nav-item"><a href="setup.html" class="guide-nav-link active">3. Laptop Setup from Zero</a></li>
+      <li class="guide-nav-header">Core Implementation</li>
+      <li class="guide-nav-item"><a href="backend.html" class="guide-nav-link">4. Express Backend & Flow</a></li>
+      <li class="guide-nav-item"><a href="frontend.html" class="guide-nav-link">5. Vanilla JS Client</a></li>
+      <li class="guide-nav-item"><a href="mongodb.html" class="guide-nav-link">6. MongoDB & Offline Store</a></li>
+      <li class="guide-nav-item"><a href="blockchain.html" class="guide-nav-link">7. Python Blockchain Engine</a></li>
+      <li class="guide-nav-header">Security & Deep Dives</li>
+      <li class="guide-nav-item"><a href="api.html" class="guide-nav-link">8. Full API Reference</a></li>
+      <li class="guide-nav-item"><a href="authentication.html" class="guide-nav-link">9. Bcrypt & JWT Auth</a></li>
+      <li class="guide-nav-item"><a href="access-control.html" class="guide-nav-link">10. Clearance & RBAC</a></li>
+      <li class="guide-nav-item"><a href="assets.html" class="guide-nav-link">11. Digital Asset Tokens</a></li>
+      <li class="guide-nav-item"><a href="troubleshooting.html" class="guide-nav-link">12. Troubleshooting Matrix</a></li>
+    </ul>
+  </aside>
+
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>3. Zero-to-One Local Laptop Setup Guide</h1>
+
+      <div class="callout callout-success">
+        <strong>Zero Complex Setup:</strong> This project includes a built-in <strong>Local Offline Storage Engine</strong>, meaning you do NOT need to install or configure MongoDB locally to run and demo the full system!
+      </div>
+
+      <h2>1. Environment Prerequisites</h2>
+      <table class="guide-table">
+        <thead>
+          <tr><th>Runtime</th><th>Required Version</th><th>Verification Command</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Node.js</strong></td><td>v18.0.0 or higher</td><td><code>node -v</code></td></tr>
+          <tr><td><strong>npm</strong></td><td>v9.0.0 or higher</td><td><code>npm -v</code></td></tr>
+          <tr><td><strong>Python</strong></td><td>v3.9 or higher</td><td><code>python --version</code> or <code>python3 --version</code></td></tr>
+        </tbody>
+      </table>
+
+      <h2>2. Cloning the Codebase</h2>
+      <pre><code># Open your terminal (PowerShell / Command Prompt / Terminal)
+git clone https://github.com/AbhiRaj-hub/SIH-2026.git
+cd SIH-2026</code></pre>
+
+      <h2>3. Terminal 1: Launch Python Blockchain Service (Port 5001)</h2>
+      <p>Navigate to the <code>blockchain-service/</code> directory and install Flask:</p>
+      <pre><code># Windows / macOS / Linux
+cd blockchain-service
+pip install flask
+python api.py</code></pre>
+      <div class="callout callout-info">
+        The Python service will start on <code>http://localhost:5001</code> and automatically create <code>chain_data.json</code> with the Genesis block.
+      </div>
+
+      <h2>4. Terminal 2: Launch Node.js Backend & Web Server (Port 5000)</h2>
+      <p>Open a new terminal window, navigate to <code>backend/</code>, install dependencies and start:</p>
+      <pre><code>cd backend
+npm install
+npm start</code></pre>
+
+      <div class="callout callout-info">
+        <strong>What happens on startup?</strong><br />
+        If you haven't configured a remote MongoDB Atlas URI in <code>backend/.env</code>, the backend seamlessly activates the <strong>Local Offline Storage Engine</strong> (<code>backend/data/db_store.json</code>). All user accounts, DIDs, grants, and assets will work immediately without any timeout!
+      </div>
+
+      <h2>5. Open the Web Application</h2>
+      <p>In your browser (Chrome / Edge / Firefox / Safari), open:</p>
+      <pre><code>http://localhost:5000</code></pre>
+
+      <h2>6. 1-Click Login Testing</h2>
+      <p>On the login page (<code>http://localhost:5000/login.html</code>), click any of the 1-click demo persona buttons:</p>
+      <ul>
+        <li><strong>Admin (Clearance Level 5):</strong> <code>admin@shieldx.io</code> / <code>Admin@123</code></li>
+        <li><strong>Manager (Clearance Level 4):</strong> <code>manager@shieldx.io</code> / <code>Manager@123</code></li>
+        <li><strong>Employee (Clearance Level 2):</strong> <code>employee@shieldx.io</code> / <code>Employee@123</code></li>
+        <li><strong>Auditor (Clearance Level 3):</strong> <code>auditor@shieldx.io</code> / <code>Auditor@123</code></li>
+      </ul>
+
+      <div class="guide-pagination">
+        <a href="architecture.html" class="page-btn">⬅ 2. Architecture</a>
+        <a href="backend.html" class="page-btn">4. Backend & Request Flow ➔</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

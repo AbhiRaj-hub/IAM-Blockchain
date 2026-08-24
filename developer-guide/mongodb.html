@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MongoDB & Offline Store | ShieldX Dev Guide</title>
+  <link rel="stylesheet" href="css/guide.css" />
+</head>
+<body>
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">SX</div>
+      <div class="guide-title">ShieldX Dev Guide</div>
+    </div>
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Architecture & Design</li>
+      <li class="guide-nav-item"><a href="index.html" class="guide-nav-link">1. System Overview</a></li>
+      <li class="guide-nav-item"><a href="architecture.html" class="guide-nav-link">2. 3-Tier Architecture</a></li>
+      <li class="guide-nav-item"><a href="setup.html" class="guide-nav-link">3. Laptop Setup from Zero</a></li>
+      <li class="guide-nav-header">Core Implementation</li>
+      <li class="guide-nav-item"><a href="backend.html" class="guide-nav-link">4. Express Backend & Flow</a></li>
+      <li class="guide-nav-item"><a href="frontend.html" class="guide-nav-link">5. Vanilla JS Client</a></li>
+      <li class="guide-nav-item"><a href="mongodb.html" class="guide-nav-link active">6. MongoDB & Offline Store</a></li>
+      <li class="guide-nav-item"><a href="blockchain.html" class="guide-nav-link">7. Python Blockchain Engine</a></li>
+      <li class="guide-nav-header">Security & Deep Dives</li>
+      <li class="guide-nav-item"><a href="api.html" class="guide-nav-link">8. Full API Reference</a></li>
+      <li class="guide-nav-item"><a href="authentication.html" class="guide-nav-link">9. Bcrypt & JWT Auth</a></li>
+      <li class="guide-nav-item"><a href="access-control.html" class="guide-nav-link">10. Clearance & RBAC</a></li>
+      <li class="guide-nav-item"><a href="assets.html" class="guide-nav-link">11. Digital Asset Tokens</a></li>
+      <li class="guide-nav-item"><a href="troubleshooting.html" class="guide-nav-link">12. Troubleshooting Matrix</a></li>
+    </ul>
+  </aside>
+
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>6. MongoDB Atlas & Offline Fallback Engine</h1>
+
+      <h2>The Dual-Mode Storage Architecture</h2>
+      <p>
+        In production and offline environments, database connectivity may vary. Our backend implements a <strong>Resilient Proxy Storage Pattern</strong>:
+      </p>
+      <pre><code>Mongoose Model Query (e.g. Identity.find().sort())
+                     |
+            Is MongoDB Connected?
+           /                     \
+        YES                       NO
+        /                           \
+Mongoose Driver            Local JSON Storage Engine
+(MongoDB Atlas)            (backend/data/db_store.json)</code></pre>
+
+      <h2>The 5 Core Collections</h2>
+
+      <h3>1. `users`</h3>
+      <p>Stores registered usernames, email, bcrypt password hash, role (<code>ADMIN</code>, <code>EMPLOYEE</code>, <code>AUDITOR</code>), clearance level (1–5), and assigned DID.</p>
+
+      <h3>2. `identities`</h3>
+      <p>Searchable index of all issued DIDs with credential IDs and blockchain block indices.</p>
+
+      <h3>3. `access_grants`</h3>
+      <p>Active and revoked resource permissions granted to specific DIDs.</p>
+
+      <h3>4. `access_logs`</h3>
+      <p>Audit trail of all clearance evaluations, storing resource, decision (<code>ALLOWED</code> / <code>DENIED</code>), reason, and mined block index.</p>
+
+      <h3>5. `assets`</h3>
+      <p>Digital document token records storing filename, version, on-chain SHA-256 hash, allocated owner DID, and block anchor index.</p>
+
+      <div class="guide-pagination">
+        <a href="frontend.html" class="page-btn">⬅ 5. Frontend Client</a>
+        <a href="blockchain.html" class="page-btn">7. Python Blockchain Engine ➔</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

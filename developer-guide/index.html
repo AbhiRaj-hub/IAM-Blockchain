@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Master Developer Guide & Technical Blueprint | BEL TrustChain</title>
+  <link rel="stylesheet" href="css/guide.css" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .guide-article section {
+      padding-top: 24px;
+      margin-bottom: 50px;
+      border-bottom: 1px solid var(--guide-border);
+      padding-bottom: 40px;
+    }
+    .guide-article section:last-child {
+      border-bottom: none;
+    }
+    .badge-guide {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+    .badge-get { background: rgba(56, 139, 253, 0.2); color: #58a6ff; border: 1px solid #388bfd; }
+    .badge-post { background: rgba(63, 185, 80, 0.2); color: #3fb950; border: 1px solid #2ea043; }
+    .badge-jwt { background: rgba(188, 140, 255, 0.2); color: #bc8cff; border: 1px solid #8957e5; }
+    .code-explanation {
+      background: rgba(22, 27, 34, 0.9);
+      border-left: 4px solid var(--guide-accent);
+      padding: 14px 18px;
+      margin: 14px 0 22px;
+      font-size: 0.92rem;
+      color: #c9d1d9;
+      border-radius: 0 6px 6px 0;
+    }
+    .code-explanation strong {
+      color: var(--guide-text-primary);
+    }
+    .step-box {
+      background: var(--guide-card-bg);
+      border: 1px solid var(--guide-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .step-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--guide-accent);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">🛡️</div>
+      <div>
+        <div class="guide-title">BEL TrustChain</div>
+        <div style="font-size: 0.72rem; color: var(--guide-text-secondary);">By Team ShieldX</div>
+      </div>
+    </div>
+
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Documentation Index</li>
+      <li class="guide-nav-item"><a href="#section-1" class="guide-nav-link active">1. Problem & Solution Overview</a></li>
+      <li class="guide-nav-item"><a href="#section-2" class="guide-nav-link">2. Core Technologies & Architecture</a></li>
+      <li class="guide-nav-item"><a href="#section-3" class="guide-nav-link">3. Build from Scratch Guide</a></li>
+      <li class="guide-nav-item"><a href="#section-4" class="guide-nav-link">4. Python Blockchain Deep-Dive</a></li>
+      <li class="guide-nav-item"><a href="#section-5" class="guide-nav-link">5. Express Backend & Resilient Store</a></li>
+      <li class="guide-nav-item"><a href="#section-6" class="guide-nav-link">6. Decentralized Identifiers (DIDs)</a></li>
+      <li class="guide-nav-item"><a href="#section-7" class="guide-nav-link">7. Role & Clearance RBAC Engine</a></li>
+      <li class="guide-nav-item"><a href="#section-8" class="guide-nav-link">8. Digital Asset Tokenization</a></li>
+      <li class="guide-nav-item"><a href="#section-9" class="guide-nav-link">9. Frontend Client & State Flow</a></li>
+      <li class="guide-nav-item"><a href="#section-10" class="guide-nav-link">10. Full REST API Specifications</a></li>
+      <li class="guide-nav-item"><a href="#section-11" class="guide-nav-link">11. Production Deployment & PM2</a></li>
+      <li class="guide-nav-item"><a href="#section-12" class="guide-nav-link">12. Troubleshooting Encyclopedia</a></li>
+      <li class="guide-nav-item"><a href="#section-13" class="guide-nav-link">13. Evaluator Viva Defense Q&A</a></li>
+    </ul>
+
+    <div style="margin-top: 30px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 6px; font-size: 0.78rem; color: var(--guide-text-secondary);">
+      📖 <strong>Comprehensive Guide:</strong> Contains full line-by-line implementation blueprints and architectural rationale.
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>BEL TrustChain — Full-Stack Developer Manual & System Blueprint</h1>
+      <p style="font-size: 1.05rem; color: #8b949e; margin-bottom: 24px;">
+        A comprehensive, line-by-line architectural guide for building a decentralized, tamper-proof security platform for Identity, Access Control, and Digital Asset Management from scratch.
+      </p>
+
+      <div class="callout callout-info">
+        <strong>Platform Name:</strong> BEL TrustChain<br />
+        <strong>Engineering Team:</strong> Team ShieldX<br />
+        <strong>Target Domain:</strong> Defense Electronics, Classified Access Control & Cryptographic Asset Management
+      </div>
+
+      <!-- SECTION 1 -->
+      <section id="section-1">
+        <h2>1. The Problem Statement & The Solution Architecture</h2>
+        
+        <h3>The Core Problem in Defense & Enterprise Security</h3>
+        <p>
+          In defense and mission-critical production facilities (such as Bharat Electronics Limited), digital infrastructure handles confidential schematics, radar telemetry software, and personnel access to classified physical/digital sectors. Standard industry architectures suffer from three critical flaws:
+        </p>
+        <ol>
+          <li>
+            <strong>Single Points of Failure (Centralized IAM):</strong> 
+            When all user accounts, password hashes, and access privileges are stored in a centralized directory service (e.g., standard LDAP, Active Directory, or a single SQL database), a single compromised root account or database SQL injection completely compromises the entire organizational security boundary.
+          </li>
+          <li>
+            <strong>Mutable Audit Trails (Log Forgery & Erasure):</strong> 
+            Standard server access logs and database audit tables can be modified or truncated by malicious insiders, compromised administrators, or attackers who gain root shell access. Consequently, post-incident forensic investigations cannot trust the log files.
+          </li>
+          <li>
+            <strong>Unanchored Digital Assets (Silent Tampering):</strong> 
+            Binary executables, radar firmware, and confidential CAD drawings reside on distributed file shares. If an adversary or supply-chain attacker alters a single byte of firmware, existing systems have no decentralized, immutable cryptographic anchor to detect the modification.
+          </li>
+        </ol>
+
+        <h3>The BEL TrustChain Solution</h3>
+        <p>
+          <strong>Team ShieldX</strong> designed <strong>BEL TrustChain</strong> as a 3-tier decentralized security architecture combining high-speed web services with an independent Proof-of-Work blockchain ledger:
+        </p>
+        <ul>
+          <li><strong>Self-Sovereign Decentralized Identifiers (DIDs):</strong> Cryptographically unique W3C-compliant identities (<code>did:bel:&lt;hex&gt;</code>) issued on-chain with immutable clearance tiers (Levels 1 to 5).</li>
+          <li><strong>Real-Time Clearance Authorization & Blockchain Logging:</strong> Access control checks enforce mathematical clearance inequality ($Clearance_{user} \ge Clearance_{resource}$ OR $Grant_{active}$). Both granted and denied access attempts are permanently mined into the blockchain ledger for absolute forensic non-repudiation.</li>
+          <li><strong>Hybrid Digital Asset Tokenization:</strong> Sensitive physical files are maintained securely off-chain in encrypted storage, while their 256-bit cryptographic SHA-256 digests are minted into immutable blockchain tokens anchored to the owner's DID.</li>
+          <li><strong>Zero-Hang Dual-Engine Database:</strong> A resilient dual-storage engine connecting to MongoDB Atlas when available, while seamlessly falling back to an in-memory/JSON store for 100% offline uptime and instant demonstration.</li>
+        </ul>
+
+        <h3>System Interaction Flow</h3>
+        <pre><code>+-----------------------------------------------------------------------------------+
+|                            USER BROWSER / CLIENT                                  |
+|         (HTML5, Vanilla CSS3, Vanilla JavaScript ES6+, JWT Session State)         |
++-----------------------------------------------------------------------------------+
+                                         |
+                                         |  HTTPS REST API + Bearer JWT
+                                         v
++-----------------------------------------------------------------------------------+
+|                        APPLICATION BACKEND (Port 5000)                            |
+|             Node.js + Express.js, Bcrypt Hashing, RBAC Middleware                 |
+|                                                                                   |
+|   +---------------------------------------+   +-------------------------------+   |
+|   |         CONTROLLER LAYER              |   |       MIDDLEWARE LAYER        |   |
+|   | • Auth (Login, Register)              |   | • authMiddleware (JWT verify) |   |
+|   | • Identity (DID Issue / Revoke)       |   | • roleMiddleware (RBAC Guard) |   |
+|   | • Access (Clearance Policy Engine)    |   | • multer (File Upload Buffer) |   |
+|   | • Assets (SHA-256 Hashing & Verify)   |   +-------------------------------+   |
+|   | • Audit (Ledger Query & Metrics)      |                                       |
+|   +---------------------------------------+                                       |
++-----------------------------------------------------------------------------------+
+                         |                                          |
+                         | Mongoose Query / Fallback                | HTTP REST IPC
+                         v                                          v
++-----------------------------------------------+  +--------------------------------+
+|          DATABASE TIER (Dual Engine)          |  |   BLOCKCHAIN ENGINE (Port 5001)|
+|                                               |  |                                |
+|  [Mode A: Remote MongoDB Atlas Cloud]         |  |  Python 3.10+ & Flask REST API |
+|  - High-speed B-Tree search indexing          |  |  • SHA-256 Proof-of-Work (PoW) |
+|  - User profiles & fast metadata mirror       |  |  • Block Mining Engine         |
+|                                               |  |  • Merkle / Block Hash Linking |
+|  [Mode B: Local Offline Storage Engine]       |  |  • Cryptographic Chain Validator|
+|  - Resilient JSON Engine (db_store.json)      |  |  • Permanent JSON Ledger Store |
+|  - Zero-hang instant local demo setup         |  |                                |
++-----------------------------------------------+  +--------------------------------+</code></pre>
+      </section>
+
+      <!-- SECTION 2 -->
+      <section id="section-2">
+        <h2>2. Core Technologies & Architecture Rationale</h2>
+        
+        <table class="guide-table">
+          <thead>
+            <tr><th>Layer</th><th>Technology</th><th>Why Chosen & Architectural Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Frontend Tier</strong></td>
+              <td>HTML5, Vanilla CSS3, Vanilla JS (ES6+)</td>
+              <td>Eliminates framework bloat, build steps, and third-party NPM vulnerabilities. Loads instantly and runs on any browser.</td>
+            </tr>
+            <tr>
+              <td><strong>Application Backend</strong></td>
+              <td>Node.js & Express.js</td>
+              <td>Asynchronous, non-blocking I/O ideal for high-throughput API routing, streaming file SHA-256 hashing, and microservice IPC.</td>
+            </tr>
+            <tr>
+              <td><strong>Blockchain Ledger</strong></td>
+              <td>Python 3.10+ & Flask</td>
+              <td>Clean, transparent, mathematical implementation of SHA-256 hashing, Proof-of-Work mining, and block serialization.</td>
+            </tr>
+            <tr>
+              <td><strong>Data Storage</strong></td>
+              <td>MongoDB Atlas + Local JSON Engine</td>
+              <td>Provides high-speed B-Tree indexing for frontend search while maintaining an automatic zero-config offline fallback.</td>
+            </tr>
+            <tr>
+              <td><strong>Security & Auth</strong></td>
+              <td>JWT (HMAC-SHA256) & Bcrypt</td>
+              <td>Stateless authentication tokens carrying DID and clearance tiers, combined with salted password hashing.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SECTION 3 -->
+      <section id="section-3">
+        <h2>3. Step-by-Step Build from Scratch</h2>
+        <p>Follow these commands to reconstruct the full codebase from a blank folder:</p>
+
+        <div class="step-box">
+          <div class="step-title">Step 1: Workspace Skeleton</div>
+          <pre><code>mkdir BEL-TrustChain
+cd BEL-TrustChain
+mkdir -p backend/config backend/controllers backend/middleware backend/models backend/routes backend/services backend/uploads backend/data
+mkdir -p blockchain-service
+mkdir -p frontend/css frontend/js
+mkdir -p developer-guide/css</code></pre>
+        </div>
+
+        <div class="step-box">
+          <div class="step-title">Step 2: Setup Python Blockchain Microservice</div>
+          <pre><code>cd blockchain-service
+pip install flask
+# Create blockchain.py, models.py, and api.py</code></pre>
+        </div>
+
+        <div class="step-box">
+          <div class="step-title">Step 3: Setup Node.js Express Backend</div>
+          <pre><code>cd ../backend
+npm init -y
+npm install express mongoose bcryptjs jsonwebtoken cors dotenv multer axios
+npm install -D nodemon</code></pre>
+        </div>
+
+        <div class="step-box">
+          <div class="step-title">Step 4: Launching Both Services</div>
+          <pre><code># Terminal 1 (Python Blockchain - Port 5001):
+cd blockchain-service
+python api.py
+
+# Terminal 2 (Node.js Web & API - Port 5000):
+cd backend
+npm start</code></pre>
+        </div>
+      </section>
+
+      <!-- SECTION 4 -->
+      <section id="section-4">
+        <h2>4. Deep Dive: Python Blockchain Consensus Engine</h2>
+        <p>
+          The blockchain microservice is located in <code>blockchain-service/</code> and comprises three core modules: <code>blockchain.py</code>, <code>models.py</code>, and <code>api.py</code>.
+        </p>
+
+        <h3>4.1 Block Computation & Proof-of-Work (`blockchain.py`)</h3>
+        <p>
+          Every block is linked cryptographically to the previous block via SHA-256. Proof-of-Work requires finding a <code>nonce</code> such that the hash has a specific prefix (e.g., two leading zeroes <code>"00"</code>):
+        </p>
+        <pre><code>class Block:
+    def __init__(self, index: int, transactions: list, previous_hash: str, nonce: int = 0, timestamp: float = None):
+        self.index = index
+        self.timestamp = timestamp or time.time()
+        self.transactions = transactions
+        self.previous_hash = previous_hash
+        self.nonce = nonce
+        self.hash = self.compute_hash()
+
+    def compute_hash(self) -> str:
+        block_string = json.dumps({
+            "index": self.index,
+            "timestamp": self.timestamp,
+            "transactions": self.transactions,
+            "previous_hash": self.previous_hash,
+            "nonce": self.nonce
+        }, sort_keys=True)
+        return hashlib.sha256(block_string.encode('utf-8')).hexdigest()</code></pre>
+
+        <div class="code-explanation">
+          <strong>Why sort_keys=True is Essential:</strong> In JSON serialization, dictionary key ordering is arbitrary. Specifying <code>sort_keys=True</code> guarantees identical string formatting, ensuring that the hash computation is 100% deterministic across all platforms.
+        </div>
+
+        <h3>4.2 Proof-of-Work Mining Loop</h3>
+        <pre><code>def proof_of_work(self, block: Block) -> str:
+    block.nonce = 0
+    computed_hash = block.compute_hash()
+    target = '0' * self.DIFFICULTY
+
+    while not computed_hash.startswith(target):
+        block.nonce += 1
+        computed_hash = block.compute_hash()
+
+    return computed_hash</code></pre>
+      </section>
+
+      <!-- SECTION 5 -->
+      <section id="section-5">
+        <h2>5. Deep Dive: Express Backend & Resilient Dual-Storage Engine</h2>
+        <p>
+          The Node.js backend handles web traffic, parses JWT credentials, verifies clearance tiers, computes file digests, and communicates with the Python blockchain engine over REST API.
+        </p>
+
+        <h3>5.1 The Transparent Proxy Pattern (`backend/models/`)</h3>
+        <p>
+          Each database model wraps both Mongoose (for remote MongoDB Atlas) and the local offline engine via a JavaScript <code>Proxy</code>:
+        </p>
+        <pre><code>// Example from User.js
+const MongooseUser = mongoose.models.User || mongoose.model('User', userSchema);
+const OfflineUser = createOfflineModel('users', { matchPassword: true });
+
+const UserProxy = new Proxy(MongooseUser, {
+  get(target, prop) {
+    if (getIsConnected()) {
+      return target[prop]; // Route to MongoDB Atlas
+    }
+    if (typeof OfflineUser[prop] === 'function') {
+      return OfflineUser[prop].bind(OfflineUser); // Route to Local Store
+    }
+    return target[prop];
+  },
+});
+
+module.exports = UserProxy;</code></pre>
+      </section>
+
+      <!-- SECTION 6 -->
+      <section id="section-6">
+        <h2>6. Decentralized Identifiers (DIDs) & Identity Lifecycle</h2>
+        <p>
+          In BEL TrustChain, identities conform to the W3C standard scheme: <code>did:bel:&lt;hex_hash&gt;</code>.
+        </p>
+        <h3>Issuance vs. Revocation:</h3>
+        <ul>
+          <li><strong>Issuance:</strong> Admin creates a DID credential with a specified role and clearance tier (1–5). A transaction of type <code>IDENTITY_ISSUE</code> is mined into a new block.</li>
+          <li><strong>Revocation:</strong> When an identity is revoked, an <code>IDENTITY_REVOKE</code> transaction is mined. The historical issuance block remains immutable, but the active state evaluator sees the revocation and denies all subsequent access attempts.</li>
+        </ul>
+      </section>
+
+      <!-- SECTION 7 -->
+      <section id="section-7">
+        <h2>7. Role & Clearance-Based Access Control (RBAC)</h2>
+        <p>The system enforces a 5-tier clearance hierarchy:</p>
+
+        <table class="guide-table">
+          <thead>
+            <tr><th>Tier</th><th>Classification</th><th>Sample Defense Resources</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Level 1</strong></td><td>Public</td><td>GENERAL_CAMPUS_BULLETIN</td></tr>
+            <tr><td><strong>Level 2</strong></td><td>Confidential</td><td>INTERNAL_PROJECT_SPECS</td></tr>
+            <tr><td><strong>Level 3</strong></td><td>Secret</td><td>FINANCIAL_AUDIT_LEDGER</td></tr>
+            <tr><td><strong>Level 4</strong></td><td>Top Secret</td><td>DEFENSE_RADAR_SCHEMATICS</td></tr>
+            <tr><td><strong>Level 5</strong></td><td>Command</td><td>MISSILE_GUIDANCE_SYSTEM</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Policy Evaluation Rule</h3>
+        <p>
+          Access is <strong>ALLOWED</strong> if:
+          $$\text{Subject Clearance Level} \ge \text{Resource Required Clearance}$$
+          OR if an active on-chain <strong>ACCESS_GRANT</strong> override exists. Otherwise, access is <strong>DENIED</strong>. Every single decision is permanently mined onto the blockchain ledger.
+        </p>
+      </section>
+
+      <!-- SECTION 8 -->
+      <section id="section-8">
+        <h2>8. Digital Asset Tokenization & Live Tamper Demo</h2>
+        <p>
+          When an asset is uploaded, Node.js computes its SHA-256 checksum:
+        </p>
+        <pre><code>const crypto = require('crypto');
+function calculateFileHash(filePath) {
+  const fileBuffer = fs.readFileSync(filePath);
+  return crypto.createHash('sha256').update(fileBuffer).digest('hex');
+}</code></pre>
+        <p>
+          The 64-character hex hash is anchored onto the blockchain. During verification, the current file on disk is re-hashed. If an attacker has changed even a single byte on disk, the re-computed hash diverges from the blockchain anchor, triggering an instant <strong>Tamper Alert</strong>.
+        </p>
+      </section>
+
+      <!-- SECTION 9 -->
+      <section id="section-9">
+        <h2>9. Frontend Web Client Architecture</h2>
+        <p>
+          The frontend uses Vanilla JavaScript with modular handlers for auth, identity, access control, asset tokens, and audit inspection.
+        </p>
+        <p>
+          The <code>apiRequest()</code> helper in <code>frontend/js/api.js</code> automatically attaches the Bearer JWT token from <code>localStorage</code> and manages JSON headers transparently:
+        </p>
+        <pre><code>async function apiRequest(endpoint, options = {}) {
+  const token = localStorage.getItem('sih_token');
+  const headers = { ...options.headers };
+
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (options.body && !(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  const response = await fetch(endpoint, { ...options, headers });
+  const data = await response.json();
+  return { ok: response.ok, status: response.status, data };
+}</code></pre>
+      </section>
+
+      <!-- SECTION 10 -->
+      <section id="section-10">
+        <h2>10. Complete REST API Specifications</h2>
+
+        <table class="guide-table">
+          <thead>
+            <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>POST</td><td><code>/api/auth/register</code></td><td>Public</td><td>Register a new user profile.</td></tr>
+            <tr><td>POST</td><td><code>/api/auth/login</code></td><td>Public</td><td>Authenticate and return signed JWT.</td></tr>
+            <tr><td>GET</td><td><code>/api/auth/me</code></td><td>JWT</td><td>Fetch current user profile.</td></tr>
+            <tr><td>POST</td><td><code>/api/identity</code></td><td>ADMIN</td><td>Issue DID credential & mine on-chain block.</td></tr>
+            <tr><td>POST</td><td><code>/api/identity/:did/revoke</code></td><td>ADMIN</td><td>Revoke DID on blockchain.</td></tr>
+            <tr><td>GET</td><td><code>/api/identity</code></td><td>JWT</td><td>List all issued DIDs.</td></tr>
+            <tr><td>POST</td><td><code>/api/access/request</code></td><td>JWT</td><td>Evaluate clearance policy & log attempt.</td></tr>
+            <tr><td>POST</td><td><code>/api/access/grant</code></td><td>ADMIN</td><td>Grant explicit resource permission.</td></tr>
+            <tr><td>POST</td><td><code>/api/assets/upload</code></td><td>JWT</td><td>Upload file, compute SHA-256, anchor to chain.</td></tr>
+            <tr><td>POST</td><td><code>/api/assets/:id/verify</code></td><td>JWT</td><td>Compare current disk hash to blockchain anchor.</td></tr>
+            <tr><td>POST</td><td><code>/api/assets/:id/tamper-demo</code></td><td>ADMIN</td><td>Simulate 1-byte tamper on disk for live demo.</td></tr>
+            <tr><td>GET</td><td><code>/api/audit</code></td><td>JWT</td><td>Get searchable audit logs and on-chain ledger.</td></tr>
+            <tr><td>GET</td><td><code>/api/blockchain/status</code></td><td>JWT</td><td>Validate full cryptographic integrity of chain.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SECTION 11 -->
+      <section id="section-11">
+        <h2>11. Production Deployment & PM2 Setup</h2>
+        <pre><code># Install PM2 globally
+npm install -g pm2
+
+# Start Python Blockchain microservice
+pm2 start "python blockchain-service/api.py" --name "bel-blockchain"
+
+# Start Node.js Express Backend
+pm2 start "node backend/server.js" --name "bel-backend"
+
+# Save process list for system reboot
+pm2 save</code></pre>
+      </section>
+
+      <!-- SECTION 12 -->
+      <section id="section-12">
+        <h2>12. Troubleshooting Encyclopedia</h2>
+        <div class="callout callout-warning">
+          <strong>Issue: "Invalid email or password credentials" on Login:</strong><br />
+          Use the 1-Click Persona buttons on <code>login.html</code> (e.g. Admin: <code>admin@bel.co.in</code> / <code>Admin@123</code> or Employee: <code>employee@bel.co.in</code> / <code>Employee@123</code>).
+        </div>
+        <div class="callout callout-warning">
+          <strong>Issue: "Connecting Chain..." stays visible:</strong><br />
+          Perform a hard browser reload (<code>Ctrl + F5</code>) to load the latest JavaScript files.
+        </div>
+      </section>
+
+      <!-- SECTION 13 -->
+      <section id="section-13">
+        <h2>13. Evaluator Viva Defense Q&A</h2>
+        <div class="callout callout-info">
+          <strong>Q: Why use a custom Python blockchain instead of Ethereum?</strong><br />
+          <strong>A:</strong> A custom lightweight Proof-of-Work blockchain provides zero transaction gas fees, zero external network dependencies, microsecond block mining, and 100% explainability during academic and defense evaluations.
+        </div>
+        <div class="callout callout-info">
+          <strong>Q: How does the system handle tamper detection?</strong><br />
+          <strong>A:</strong> The physical file is hashed using SHA-256 upon upload and permanently anchored to a mined block. When verified, the file is re-hashed; any unauthorized modification changes the computed digest, alerting the security team immediately.
+        </div>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

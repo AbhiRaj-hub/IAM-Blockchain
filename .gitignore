@@ -22,9 +22,6 @@ backend/uploads/
 *.log
 npm-debug.log*
 
-# Developer Guide (Excluded as requested)
-developer-guide/
-
 # OS and IDE Files
 .DS_Store
 Thumbs.db

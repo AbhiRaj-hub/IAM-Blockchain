@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontend Guide | Developer Guide</title>
+  <link rel="stylesheet" href="css/guide.css" />
+</head>
+<body>
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">SX</div>
+      <div class="guide-title">SIH-2026 Dev Guide</div>
+    </div>
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Introduction</li>
+      <li class="guide-nav-item"><a href="index.html" class="guide-nav-link">1. Overview & Goals</a></li>
+      <li class="guide-nav-item"><a href="architecture.html" class="guide-nav-link">2. Architecture</a></li>
+      <li class="guide-nav-item"><a href="setup.html" class="guide-nav-link">3. Zero-to-One Setup</a></li>
+      <li class="guide-nav-header">Core Concepts</li>
+      <li class="guide-nav-item"><a href="backend.html" class="guide-nav-link">4. Node/Express Backend</a></li>
+      <li class="guide-nav-item"><a href="frontend.html" class="guide-nav-link active">5. Vanilla JS Frontend</a></li>
+      <li class="guide-nav-item"><a href="mongodb.html" class="guide-nav-link">6. MongoDB Atlas Mirror</a></li>
+      <li class="guide-nav-item"><a href="blockchain.html" class="guide-nav-link">7. Python Blockchain</a></li>
+      <li class="guide-nav-header">Security & Deep Dives</li>
+      <li class="guide-nav-item"><a href="api.html" class="guide-nav-link">8. REST API Reference</a></li>
+      <li class="guide-nav-item"><a href="authentication.html" class="guide-nav-link">9. Bcrypt & JWT Auth</a></li>
+      <li class="guide-nav-item"><a href="access-control.html" class="guide-nav-link">10. Clearance & RBAC</a></li>
+      <li class="guide-nav-item"><a href="assets.html" class="guide-nav-link">11. SHA-256 Asset Integrity</a></li>
+      <li class="guide-nav-item"><a href="troubleshooting.html" class="guide-nav-link">12. Troubleshooting</a></li>
+    </ul>
+  </aside>
+
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>5. Vanilla JavaScript & Frontend</h1>
+
+      <h2>Clean & Lightweight Architecture</h2>
+      <p>
+        The frontend uses standard <strong>HTML5</strong>, <strong>CSS3</strong>, and modern <strong>Vanilla JavaScript (ES6)</strong> without bulky framework dependencies.
+      </p>
+
+      <h2>How the Frontend Communicates with the Backend</h2>
+      <p>
+        In <code>js/api.js</code>, a reusable <code>apiRequest()</code> helper wraps the browser's native <code>fetch()</code> API:
+      </p>
+      <pre><code>async function apiRequest(endpoint, options = {}) {
+  const token = localStorage.getItem('sih_token');
+  const headers = { ...options.headers };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`http://localhost:5000${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  const data = await response.json();
+  return { ok: response.ok, status: response.status, data };
+}</code></pre>
+
+      <h2>Authentication Storage: localStorage</h2>
+      <p>When a user logs in:</p>
+      <ul>
+        <li><code>sih_token</code>: Stores the JWT string.</li>
+        <li><code>sih_user</code>: Stores user JSON (name, role, clearance level, DID).</li>
+      </ul>
+
+      <div class="guide-pagination">
+        <a href="backend.html" class="page-btn">⬅ 4. Backend Guide</a>
+        <a href="mongodb.html" class="page-btn">6. MongoDB Atlas Guide ➔</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

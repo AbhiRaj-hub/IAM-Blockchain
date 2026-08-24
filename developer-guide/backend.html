@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backend Architecture & Code Deep-Dive | BEL TrustChain</title>
+  <link rel="stylesheet" href="css/guide.css" />
+  <style>
+    html { scroll-behavior: smooth; }
+    .guide-article section {
+      padding-top: 24px;
+      margin-bottom: 50px;
+      border-bottom: 1px solid var(--guide-border);
+      padding-bottom: 40px;
+    }
+    .guide-article section:last-child { border-bottom: none; }
+    .code-explanation {
+      background: rgba(22, 27, 34, 0.9);
+      border-left: 4px solid var(--guide-accent);
+      padding: 14px 18px;
+      margin: 14px 0 22px;
+      font-size: 0.92rem;
+      color: #c9d1d9;
+      border-radius: 0 6px 6px 0;
+    }
+    .code-explanation strong { color: var(--guide-text-primary); }
+    .file-tag {
+      display: inline-block;
+      background: rgba(56, 139, 253, 0.15);
+      border: 1px solid #388bfd;
+      color: #58a6ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">⚙️</div>
+      <div>
+        <div class="guide-title">Backend Blueprint</div>
+        <div style="font-size: 0.72rem; color: var(--guide-text-secondary);">Node.js & Express Architecture</div>
+      </div>
+    </div>
+
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Backend Sections</li>
+      <li class="guide-nav-item"><a href="#be-overview" class="guide-nav-link active">1. Overview & Pipeline</a></li>
+      <li class="guide-nav-item"><a href="#be-server" class="guide-nav-link">2. Server Entry (`server.js`)</a></li>
+      <li class="guide-nav-item"><a href="#be-database" class="guide-nav-link">3. Dual-Engine Store (`localStore.js`)</a></li>
+      <li class="guide-nav-item"><a href="#be-auth" class="guide-nav-link">4. Auth & JWT (`authController.js`)</a></li>
+      <li class="guide-nav-item"><a href="#be-identity" class="guide-nav-link">5. Identity & DID (`identityController.js`)</a></li>
+      <li class="guide-nav-item"><a href="#be-access" class="guide-nav-link">6. Access & Clearance (`accessController.js`)</a></li>
+      <li class="guide-nav-item"><a href="#be-assets" class="guide-nav-link">7. Assets & Tamper (`assetController.js`)</a></li>
+      <li class="guide-nav-item"><a href="#be-audit" class="guide-nav-link">8. Audit & Telemetry (`auditController.js`)</a></li>
+      <li class="guide-nav-item"><a href="#be-middleware" class="guide-nav-link">9. Middlewares (`auth`, `role`)</a></li>
+      <li class="guide-nav-item"><a href="#be-services" class="guide-nav-link">10. Blockchain IPC (`blockchainService.js`)</a></li>
+      <li class="guide-nav-item"><a href="index.html" class="guide-nav-link">⬅ Back to Master Guide</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>BEL TrustChain — Backend Architecture & Code Deep-Dive</h1>
+      <p style="font-size: 1.05rem; color: #8b949e; margin-bottom: 24px;">
+        A comprehensive guide explaining the Node.js/Express application layer, dual-engine storage resilience, cryptographic hashing, and microservice inter-process communication.
+      </p>
+
+      <!-- SECTION 1 -->
+      <section id="be-overview">
+        <h2>1. High-Level Backend Overview & Request Lifecycle</h2>
+        <p>
+          The BEL TrustChain backend is a high-performance, asynchronous REST API service built on <strong>Node.js</strong> and <strong>Express.js</strong>. It acts as the central coordinator between the frontend web client, the storage database, and the Python Proof-of-Work blockchain service.
+        </p>
+
+        <h3>The Full Request-Response Journey</h3>
+        <pre><code>[Browser Client] 
+       │  (1) HTTP Request + Bearer JWT
+       ▼
+[server.js] ──▶ CORS & JSON Body Parsing
+       │
+       ▼
+[Route Layer] (e.g. accessRoutes.js)
+       │
+       ▼
+[Middleware Layer] ──▶ authMiddleware (Verifies JWT) ──▶ roleMiddleware (Checks RBAC)
+       │
+       ▼
+[Controller Layer] (e.g. accessController.js) ──▶ Business Logic & Input Sanitization
+       │
+       ├───▶ (2) [blockchainService.js] ──▶ HTTP POST to Python Blockchain (Port 5001)
+       │                                     • Mines Proof-of-Work Block
+       │                                     • Returns block_index & block_hash
+       │
+       └───▶ (3) [Database / Mirror Layer] (Mongoose Proxy / localStore.js)
+                                             • Indexes record for fast search & filtering
+       │
+       ▼
+[Client Response] ◀── Returns JSON payload + Blockchain Anchor Metadata</code></pre>
+      </section>
+
+      <!-- SECTION 2 -->
+      <section id="be-server">
+        <h2>2. Server Entry Point & Middleware Mounting (`server.js`)</h2>
+        <div class="file-tag">backend/server.js</div>
+        <p>
+          <code>server.js</code> initializes the Express application, configures security headers, mounts static asset directories, registers modular API routes, and establishes a centralized error-handling boundary.
+        </p>
+
+        <h3>Core Code Implementation:</h3>
+        <pre><code>const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const path = require('path');
+const connectDB = require('./config/db');
+
+dotenv.config();
+connectDB(); // Attempt MongoDB Atlas connection with automatic offline fallback
+
+const app = express();
+
+// 1. Core Global Middlewares
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// 2. Static File Serving
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
+app.use('/guide', express.static(path.join(__dirname, '..', 'developer-guide')));
+
+// 3. API Route Mounting
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/identity', require('./routes/identityRoutes'));
+app.use('/api/access', require('./routes/accessRoutes'));
+app.use('/api/assets', require('./routes/assetRoutes'));
+app.use('/api/audit', require('./routes/auditRoutes'));
+
+// 4. Centralized Error Handler
+app.use((err, req, res, next) => {
+  console.error('[Server Error Handler]:', err.stack);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+  });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🛡️ BEL TrustChain running on http://localhost:${PORT}`));</code></pre>
+
+        <div class="code-explanation">
+          <strong>What this code does:</strong>
+          <ul>
+            <li>Loads environment variables from <code>.env</code>.</li>
+            <li>Connects to the database asynchronously without blocking web requests.</li>
+            <li>Mounts the frontend single-page application at <code>/</code> and this developer guide at <code>/guide</code>.</li>
+            <li>Ensures that unexpected runtime exceptions are caught by the 4-argument error handler middleware rather than crashing the Node process.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECTION 3 -->
+      <section id="be-database">
+        <h2>3. The Resilient Dual-Engine Database (`localStore.js` & Proxies)</h2>
+        <div class="file-tag">backend/models/localStore.js & backend/models/User.js</div>
+        <p>
+          One of the core engineering achievements of this project is the **Zero-Hang Dual-Engine Architecture**. If MongoDB Atlas is available, Mongoose executes queries against the cloud database. If the internet or MongoDB is unreachable, the system automatically routes queries to a local in-memory/JSON store (<code>backend/data/db_store.json</code>) without changing a single line of controller code!
+        </p>
+
+        <h3>3.1 The Transparent Model Proxy Pattern</h3>
+        <pre><code>// User.js
+const mongoose = require('mongoose');
+const { createOfflineModel } = require('./localStore');
+const { getIsConnected } = require('../config/db');
+
+const userSchema = new mongoose.Schema({ ... });
+const MongooseUser = mongoose.models.User || mongoose.model('User', userSchema);
+const OfflineUser = createOfflineModel('users', { matchPassword: true });
+
+const UserProxy = new Proxy(MongooseUser, {
+  get(target, prop) {
+    if (getIsConnected()) {
+      return target[prop]; // Route to MongoDB Atlas
+    }
+    if (typeof OfflineUser[prop] === 'function') {
+      return OfflineUser[prop].bind(OfflineUser); // Route to Local JSON Engine
+    }
+    return target[prop];
+  },
+});
+
+module.exports = UserProxy;</code></pre>
+
+        <h3>3.2 The Thenable QueryChain Engine</h3>
+        <p>
+          Mongoose queries allow chained operators such as <code>await User.find().sort({ createdAt: -1 }).limit(10)</code>. <code>localStore.js</code> implements a custom <code>QueryChain</code> class that supports synchronous chaining and implements the JavaScript <strong>Thenable protocol</strong> (<code>then()</code>) so it can be <code>await</code>ed identically to Mongoose:
+        </p>
+        <pre><code>class QueryChain {
+  constructor(items, defaultMethods) {
+    this._items = (items || []).map((i) => wrapDocument(i, defaultMethods));
+  }
+
+  sort(sortObj) {
+    this._items.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    return this; // Returns instance for chaining
+  }
+
+  limit(n) {
+    if (typeof n === 'number') this._items = this._items.slice(0, n);
+    return this;
+  }
+
+  select(fields) {
+    return this;
+  }
+
+  // Resolves the promise when 'await' is executed
+  then(resolve, reject) {
+    return Promise.resolve(this._items).then(resolve, reject);
+  }
+}</code></pre>
+      </section>
+
+      <!-- SECTION 4 -->
+      <section id="be-auth">
+        <h2>4. Authentication & JWT Security Controller (`authController.js`)</h2>
+        <div class="file-tag">backend/controllers/authController.js</div>
+        <p>
+          Manages user onboarding, credential verification, and stateless JSON Web Token generation.
+        </p>
+
+        <h3>4.1 Multi-Strategy Password Matching</h3>
+        <p>
+          To ensure 100% login reliability during presentations while preserving high cryptographic security, <code>authController.js</code> executes multi-tier credential matching:
+        </p>
+        <pre><code>const login = async (req, res) => {
+  const { email, password } = req.body;
+  const cleanEmail = String(email).trim().toLowerCase();
+  const cleanPassword = String(password).trim();
+
+  const user = await User.findOne({ email: cleanEmail });
+  if (!user) {
+    return res.status(401).json({ success: false, message: 'Invalid email or password credentials.' });
+  }
+
+  let isMatch = false;
+
+  // 1. If wrapped Mongoose doc with custom matchPassword
+  if (typeof user.matchPassword === 'function') {
+    isMatch = await user.matchPassword(cleanPassword);
+  } 
+  // 2. Direct Bcrypt comparison against stored hash
+  else if (user.password && user.password.startsWith('$2')) {
+    isMatch = await bcrypt.compare(cleanPassword, user.password);
+  } 
+  // 3. Direct plaintext match fallback
+  else if (user.password) {
+    isMatch = cleanPassword === user.password;
+  }
+
+  if (!isMatch) {
+    return res.status(401).json({ success: false, message: 'Invalid email or password credentials.' });
+  }
+
+  // Generate signed JWT token
+  const token = generateToken(user);
+  return res.status(200).json({ success: true, message: 'Login successful', data: { token, user } });
+};</code></pre>
+
+        <h3>4.2 JWT Token Signing</h3>
+        <p>
+          The JWT payload securely encapsulates user identity, role, and clearance tier:
+        </p>
+        <pre><code>const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+      clearanceLevel: user.clearanceLevel,
+      did: user.did,
+    },
+    process.env.JWT_SECRET || 'bel_secure_key_2026',
+    { expiresIn: '7d' }
+  );
+};</code></pre>
+      </section>
+
+      <!-- SECTION 5 -->
+      <section id="be-identity">
+        <h2>5. Decentralized Identity (DID) Controller (`identityController.js`)</h2>
+        <div class="file-tag">backend/controllers/identityController.js</div>
+        <p>
+          Handles self-sovereign identity generation conforming to <code>did:bel:&lt;hash&gt;</code>, calling the Python blockchain to mine an <code>IDENTITY_ISSUE</code> transaction, and indexing metadata in the local registry.
+        </p>
+
+        <h3>Issuing a DID:</h3>
+        <pre><code>const issueIdentity = async (req, res) => {
+  const { userId, subjectName, role, clearanceLevel, issuer } = req.body;
+
+  // 1. Mine IDENTITY_ISSUE transaction on Python Blockchain
+  const blockchainRes = await blockchainService.issueIdentity(
+    subjectName,
+    role,
+    clearanceLevel,
+    issuer || 'BEL-Authority'
+  );
+
+  const did = blockchainRes.did;
+  const blockIndex = blockchainRes.block_index;
+
+  // 2. Index identity in database mirror
+  const identityRecord = await Identity.create({
+    did,
+    userId: userId || null,
+    credentialId: blockchainRes.credential_id,
+    subjectName,
+    role,
+    clearanceLevel: Number(clearanceLevel),
+    issuer: issuer || 'BEL-Authority',
+    status: 'ACTIVE',
+    blockchainBlockIndex: blockIndex,
+  });
+
+  // 3. Link DID to user account
+  if (userId) {
+    await User.findByIdAndUpdate(userId, { did, role, clearanceLevel });
+  }
+
+  return res.status(201).json({ success: true, data: identityRecord });
+};</code></pre>
+      </section>
+
+      <!-- SECTION 6 -->
+      <section id="be-access">
+        <h2>6. Access Control & Clearance Policy Engine (`accessController.js`)</h2>
+        <div class="file-tag">backend/controllers/accessController.js</div>
+        <p>
+          Implements the mathematical clearance evaluation policy:
+          $$\text{Decision} = (\text{Clearance}_{\text{subject}} \ge \text{Clearance}_{\text{resource}}) \lor \text{HasActiveGrant}_{\text{on\_chain}}$$
+        </p>
+
+        <h3>Clearance Request Check:</h3>
+        <pre><code>const requestAccess = async (req, res) => {
+  const { resource, requiredClearance } = req.body;
+  const user = req.user;
+  const did = user.did || `did:bel:${user._id}`;
+  const userClearance = user.clearanceLevel || 1;
+  const reqClearance = Number(requiredClearance);
+
+  // 1. Evaluate policy and mine immutable ACCESS_ATTEMPT block on Blockchain
+  const blockchainRes = await blockchainService.checkAccess(
+    did,
+    resource,
+    userClearance,
+    reqClearance
+  );
+
+  const decision = blockchainRes.decision; // 'ALLOWED' or 'DENIED'
+  const blockIndex = blockchainRes.block_index;
+
+  // 2. Save forensic audit log
+  const logRecord = await AccessLog.create({
+    did,
+    resource,
+    decision,
+    reason: blockchainRes.reason,
+    blockchainBlockIndex: blockIndex,
+    timestamp: new Date(),
+  });
+
+  const isAllowed = decision === 'ALLOWED';
+  return res.status(isAllowed ? 200 : 403).json({
+    success: isAllowed,
+    decision,
+    message: isAllowed ? 'Access GRANTED' : 'Access DENIED',
+    blockchainBlockIndex: blockIndex,
+  });
+};</code></pre>
+      </section>
+
+      <!-- SECTION 7 -->
+      <section id="be-assets">
+        <h2>7. Digital Asset Tokenization & Live Tamper Forensics (`assetController.js`)</h2>
+        <div class="file-tag">backend/controllers/assetController.js & backend/services/assetService.js</div>
+        <p>
+          Handles file uploads via <code>multer</code>, calculates the 256-bit SHA-256 digest, anchors the hash to the owner's DID on the blockchain, and provides live 1-byte disk tamper simulation.
+        </p>
+
+        <h3>7.1 SHA-256 File Digest Calculation:</h3>
+        <pre><code>const crypto = require('crypto');
+const fs = require('fs');
+
+function calculateFileHash(filePath) {
+  const fileBuffer = fs.readFileSync(filePath);
+  return crypto.createHash('sha256').update(fileBuffer).digest('hex');
+}</code></pre>
+
+        <h3>7.2 Live Tamper Simulation (`tamperAssetDemo`):</h3>
+        <pre><code>const tamperAssetDemo = async (req, res) => {
+  const asset = await findAssetByIdOrKey(req.params.id);
+  const filePath = resolveAssetDiskPath(asset);
+
+  // Deliberately modify 1 byte on disk to simulate malicious tampering
+  fs.appendFileSync(filePath, '\n[UNAUTHORIZED_MODIFICATION_BYTE_TAMPER]');
+  const newTamperedHash = calculateFileHash(filePath);
+
+  return res.status(200).json({
+    success: true,
+    message: 'File modified on disk for tamper demonstration.',
+    originalBlockchainHash: asset.sha256,
+    newTamperedHash: newTamperedHash,
+  });
+};</code></pre>
+
+        <h3>7.3 Cryptographic Integrity Verification (`verifyAsset`):</h3>
+        <pre><code>const verifyAsset = async (req, res) => {
+  const asset = await findAssetByIdOrKey(req.params.id);
+  const filePath = resolveAssetDiskPath(asset);
+
+  // Recalculate hash of physical file on disk
+  const currentHash = calculateFileHash(filePath);
+  const expectedHash = asset.sha256;
+  const isIntact = currentHash === expectedHash;
+
+  return res.status(200).json({
+    success: true,
+    data: {
+      expectedHash,
+      currentHash,
+      integrityIntact: isIntact,
+      status: isIntact ? 'VERIFIED_AUTHENTIC' : 'TAMPERED_WARNING',
+    },
+  });
+};</code></pre>
+      </section>
+
+      <!-- SECTION 8 -->
+      <section id="be-middleware">
+        <h2>8. Middlewares: JWT Verification & RBAC Guards</h2>
+        <div class="file-tag">backend/middleware/authMiddleware.js & roleMiddleware.js</div>
+        
+        <h3>8.1 `authMiddleware.js` (Bearer Token Verification):</h3>
+        <pre><code>const jwt = require('jsonwebtoken');
+
+const protect = (req, res, next) => {
+  let token;
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Not authorized: No token provided.' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'bel_secure_key_2026');
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ success: false, message: 'Not authorized: Token invalid or expired.' });
+  }
+};</code></pre>
+
+        <h3>8.2 `roleMiddleware.js` (Role-Based Guards):</h3>
+        <pre><code>const authorizeRoles = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `Forbidden: Role '${req.user ? req.user.role : 'UNKNOWN'}' is not authorized.`,
+      });
+    }
+    next();
+  };
+};</code></pre>
+      </section>
+
+      <!-- SECTION 9 -->
+      <section id="be-services">
+        <h2>9. Blockchain Inter-Service Communication (`blockchainService.js`)</h2>
+        <div class="file-tag">backend/services/blockchainService.js</div>
+        <p>
+          Encapsulates all Axios HTTP calls from Node.js (port 5000) to the Python Flask blockchain microservice (port 5001) with fallback handling and timeouts.
+        </p>
+
+        <pre><code>const axios = require('axios');
+const BLOCKCHAIN_URL = process.env.BLOCKCHAIN_API_URL || 'http://localhost:5001';
+
+const issueIdentity = async (subjectName, role, clearanceLevel, issuer) => {
+  const res = await axios.post(`${BLOCKCHAIN_URL}/identity/issue`, {
+    subject_name: subjectName,
+    role,
+    clearance_level: Number(clearanceLevel),
+    issuer,
+  }, { timeout: 4000 });
+  return res.data;
+};
+
+const checkAccess = async (did, resource, userClearance, requiredClearance) => {
+  const res = await axios.post(`${BLOCKCHAIN_URL}/access/check`, {
+    did,
+    resource,
+    user_clearance: Number(userClearance),
+    required_clearance: Number(requiredClearance),
+  }, { timeout: 4000 });
+  return res.data;
+};
+
+const validateChain = async () => {
+  const res = await axios.get(`${BLOCKCHAIN_URL}/chain/validate`, { timeout: 3000 });
+  return res.data;
+};</code></pre>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

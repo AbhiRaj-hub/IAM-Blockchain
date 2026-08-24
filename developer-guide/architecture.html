@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Architecture | Developer Guide</title>
+  <link rel="stylesheet" href="css/guide.css" />
+</head>
+<body>
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">SX</div>
+      <div class="guide-title">SIH-2026 Dev Guide</div>
+    </div>
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Introduction</li>
+      <li class="guide-nav-item"><a href="index.html" class="guide-nav-link">1. Overview & Goals</a></li>
+      <li class="guide-nav-item"><a href="architecture.html" class="guide-nav-link active">2. Architecture</a></li>
+      <li class="guide-nav-item"><a href="setup.html" class="guide-nav-link">3. Zero-to-One Setup</a></li>
+      <li class="guide-nav-header">Core Concepts</li>
+      <li class="guide-nav-item"><a href="backend.html" class="guide-nav-link">4. Node/Express Backend</a></li>
+      <li class="guide-nav-item"><a href="frontend.html" class="guide-nav-link">5. Vanilla JS Frontend</a></li>
+      <li class="guide-nav-item"><a href="mongodb.html" class="guide-nav-link">6. MongoDB Atlas Mirror</a></li>
+      <li class="guide-nav-item"><a href="blockchain.html" class="guide-nav-link">7. Python Blockchain</a></li>
+      <li class="guide-nav-header">Security & Deep Dives</li>
+      <li class="guide-nav-item"><a href="api.html" class="guide-nav-link">8. REST API Reference</a></li>
+      <li class="guide-nav-item"><a href="authentication.html" class="guide-nav-link">9. Bcrypt & JWT Auth</a></li>
+      <li class="guide-nav-item"><a href="access-control.html" class="guide-nav-link">10. Clearance & RBAC</a></li>
+      <li class="guide-nav-item"><a href="assets.html" class="guide-nav-link">11. SHA-256 Asset Integrity</a></li>
+      <li class="guide-nav-item"><a href="troubleshooting.html" class="guide-nav-link">12. Troubleshooting</a></li>
+    </ul>
+  </aside>
+
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>2. 3-Tier Hybrid Architecture</h1>
+
+      <h2>High-Level System Topology</h2>
+      <pre><code>
+               +----------------------------------+
+               |     VANILLA JS WEB FRONTEND      |
+               | (HTML5 + CSS3 + DOM + JWT Token) |
+               +-----------------+----------------+
+                                 |
+                                 | HTTP REST / JSON + Bearer Auth
+                                 v
+               +----------------------------------+
+               |       NODE.JS + EXPRESS BACKEND  |
+               | (Controllers, Routes, Multer)    |
+               +--------+----------------+--------+
+                        |                |
+     Mongoose CRUD      |                | Axios HTTP Client
+     Fast Search Mirror |                | Cryptographic Source of Truth
+                        v                v
+          +--------------------+   +---------------------------+
+          |   MONGODB ATLAS    |   | PYTHON BLOCKCHAIN SERVICE |
+          | - Users & Passwords|   | - SHA-256 Proof-of-Work   |
+          | - Fast DID Search  |   | - Immutable Blocks (PoW)  |
+          | - Queryable Logs   |   | - Asset Hashing (SHA-256) |
+          +--------------------+   +---------------------------+
+      </code></pre>
+
+      <h2>The Dual-Storage Philosophy: Why MongoDB + Blockchain?</h2>
+      <p>
+        A frequent question asked by judges: <em>"Why do you need both MongoDB and Blockchain?"</em>
+      </p>
+      <table class="guide-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Python Blockchain Ledger</th>
+            <th>MongoDB Atlas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Role</strong></td>
+            <td>Cryptographic Source of Truth</td>
+            <td>High-speed queryable mirror / index</td>
+          </tr>
+          <tr>
+            <td><strong>Immutability</strong></td>
+            <td>100% Immutable (SHA-256 Block Linking)</td>
+            <td>Mutable (can be updated / indexed)</td>
+          </tr>
+          <tr>
+            <td><strong>Query Speed</strong></td>
+            <td>Linear block scan (slow for search)</td>
+            <td>Milliseconds (B-Tree indexed search)</td>
+          </tr>
+          <tr>
+            <td><strong>What is Stored?</strong></td>
+            <td>DID hashes, access decisions, asset SHA-256</td>
+            <td>User profiles, usernames, file paths</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="guide-pagination">
+        <a href="index.html" class="page-btn">⬅ 1. Overview</a>
+        <a href="setup.html" class="page-btn">3. Zero-to-One Setup ➔</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

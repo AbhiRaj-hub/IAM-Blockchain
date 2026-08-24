@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Asset Tokens | ShieldX Dev Guide</title>
+  <link rel="stylesheet" href="css/guide.css" />
+</head>
+<body>
+  <aside class="guide-sidebar">
+    <div class="guide-brand">
+      <div class="guide-logo">SX</div>
+      <div class="guide-title">ShieldX Dev Guide</div>
+    </div>
+    <ul class="guide-nav">
+      <li class="guide-nav-header">Architecture & Design</li>
+      <li class="guide-nav-item"><a href="index.html" class="guide-nav-link">1. System Overview</a></li>
+      <li class="guide-nav-item"><a href="architecture.html" class="guide-nav-link">2. 3-Tier Architecture</a></li>
+      <li class="guide-nav-item"><a href="setup.html" class="guide-nav-link">3. Laptop Setup from Zero</a></li>
+      <li class="guide-nav-header">Core Implementation</li>
+      <li class="guide-nav-item"><a href="backend.html" class="guide-nav-link">4. Express Backend & Flow</a></li>
+      <li class="guide-nav-item"><a href="frontend.html" class="guide-nav-link">5. Vanilla JS Client</a></li>
+      <li class="guide-nav-item"><a href="mongodb.html" class="guide-nav-link">6. MongoDB & Offline Store</a></li>
+      <li class="guide-nav-item"><a href="blockchain.html" class="guide-nav-link">7. Python Blockchain Engine</a></li>
+      <li class="guide-nav-header">Security & Deep Dives</li>
+      <li class="guide-nav-item"><a href="api.html" class="guide-nav-link">8. Full API Reference</a></li>
+      <li class="guide-nav-item"><a href="authentication.html" class="guide-nav-link">9. Bcrypt & JWT Auth</a></li>
+      <li class="guide-nav-item"><a href="access-control.html" class="guide-nav-link">10. Clearance & RBAC</a></li>
+      <li class="guide-nav-item"><a href="assets.html" class="guide-nav-link active">11. Digital Asset Tokens</a></li>
+      <li class="guide-nav-item"><a href="troubleshooting.html" class="guide-nav-link">12. Troubleshooting Matrix</a></li>
+    </ul>
+  </aside>
+
+  <main class="guide-content">
+    <article class="guide-article">
+      <h1>11. Digital Asset Tokenization & SHA-256 Integrity</h1>
+
+      <h2>Asset Tokenization Model</h2>
+      <p>
+        In the ShieldX platform, digital assets (schematics, binaries, confidential documents) are tokenized on the blockchain:
+      </p>
+      <ul>
+        <li><strong>Uniqueness:</strong> Every digital asset produces a distinct cryptographic SHA-256 fingerprint.</li>
+        <li><strong>DID Allocation:</strong> Each token is directly bound to a user's Decentralized Identifier (e.g. <code>did:sx:admin001</code>).</li>
+        <li><strong>Controlled Minting:</strong> Only authorized Administrators and Managers can mint and allocate asset tokens.</li>
+      </ul>
+
+      <h2>The Anchoring Workflow</h2>
+      <pre><code>Document Uploaded by Authorized Role
+   ↓
+Node.js computes crypto.createHash('sha256')
+   ↓
+Physical file stored in off-chain directory (uploads/)
+   ↓
+SHA-256 hash + owner DID sent to Python Blockchain API
+   ↓
+ASSET_ANCHOR transaction mined into permanent Block
+   ↓
+Fast searchable metadata mirror indexed in MongoDB / Local Store</code></pre>
+
+      <h2>How Verification & Tamper Detection Works</h2>
+      <p>When an auditor clicks <strong>Verify Integrity</strong>:</p>
+      <ol>
+        <li>Node.js re-hashes the current physical file on disk.</li>
+        <li>It compares the current hash against the blockchain-anchored expected hash.</li>
+        <li>If <code>currentHash === expectedHash</code>: <strong>100% Authentic</strong>.</li>
+        <li>If <code>currentHash !== expectedHash</code>: <strong>TAMPERING DETECTED</strong>.</li>
+      </ol>
+
+      <div class="guide-pagination">
+        <a href="access-control.html" class="page-btn">⬅ 10. Access Control</a>
+        <a href="troubleshooting.html" class="page-btn">12. Troubleshooting Matrix ➔</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>
