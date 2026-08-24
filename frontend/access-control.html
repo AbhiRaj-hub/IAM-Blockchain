@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access Control & Clearance | BEL TrustChain</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <h2>🛡️ BEL TrustChain</h2>
+        <span class="subtext">By Team ShieldX</span>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html">📊 Dashboard</a></li>
+        <li><a href="identity.html">🆔 Identity (DID)</a></li>
+        <li><a href="access-control.html" class="active">🛡️ Access Control</a></li>
+        <li><a href="assets.html">📄 Asset Tokens</a></li>
+        <li><a href="audit.html">📜 Audit Ledger</a></li>
+      </ul>
+
+      <div class="sidebar-user">
+        <div class="user-title" id="navbarUserName">Loading...</div>
+        <div class="user-subtitle" id="navbarUserRole">ROLE</div>
+        <div id="navbarUserDid" style="font-size: 0.72rem; color: #93c5fd; word-break: break-all; margin-bottom: 8px;"></div>
+        <button class="btn btn-secondary btn-sm" style="width: 100%; background: #1e3a5f; color: #ffffff; border-color: #3b82f6;" onclick="logout()">Sign Out</button>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="main-topbar">
+        <div class="page-heading">
+          <h1>Role & Clearance-Based Access Control</h1>
+          <p>Policy enforcement (User Clearance >= Required) with permanent blockchain audit logging</p>
+        </div>
+        <div>
+          <button class="btn btn-secondary btn-sm" onclick="loadGrants()">🔄 Refresh</button>
+        </div>
+      </header>
+
+      <div class="main-body">
+        <!-- Interactive Clearance Test Box -->
+        <div class="card">
+          <h3 style="margin-bottom: 16px; color: var(--color-header);">🛡️ Request Resource Access (Clearance Policy Verification)</h3>
+          <form id="accessRequestForm">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="requestResource">Target Classified Resource</label>
+                <select id="requestResource" class="form-control" onchange="updatePresetClearance(this)">
+                  <option value="GENERAL_CAMPUS_BULLETIN" data-lvl="1">General Campus Bulletin (Req Level 1)</option>
+                  <option value="INTERNAL_PROJECT_SPECS" data-lvl="2">Internal Project Specs (Req Level 2)</option>
+                  <option value="FINANCIAL_AUDIT_LEDGER" data-lvl="3">Financial Audit Ledger (Req Level 3)</option>
+                  <option value="DEFENSE_RADAR_SCHEMATICS" data-lvl="4">Defense Radar Schematics (Req Level 4)</option>
+                  <option value="MISSILE_GUIDANCE_SYSTEM" data-lvl="5">Missile Guidance System (Req Level 5)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="requestClearance">Required Clearance Level</label>
+                <input type="number" id="requestClearance" class="form-control" value="1" min="1" max="5" required />
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 0.85rem; color: var(--text-muted);">
+                Policy: <code>User Clearance &ge; Resource Requirement</code>. All attempts are mined into immutable blocks.
+              </span>
+              <button type="submit" class="btn btn-primary">
+                ⚡ Evaluate Clearance & Log to Blockchain
+              </button>
+            </div>
+          </form>
+
+          <!-- Result Callout -->
+          <div id="accessResultBox" class="result-callout">
+            <strong id="accessResultTitle" style="font-size: 1rem; display: block; margin-bottom: 4px;"></strong>
+            <div id="accessResultText"></div>
+            <pre id="accessResultJson" class="code-json"></pre>
+          </div>
+        </div>
+
+        <!-- Grant Explicit Permission (Admin) -->
+        <div class="card admin-only">
+          <h3 style="margin-bottom: 16px; color: var(--color-header);">Grant Explicit Resource Access (Admin Override)</h3>
+          <form id="grantAccessForm">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="grantDid">Subject DID</label>
+                <input type="text" id="grantDid" class="form-control" placeholder="did:bel:..." required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="grantResource">Resource Identifier</label>
+                <input type="text" id="grantResource" class="form-control" placeholder="e.g. DEFENSE_RADAR_SCHEMATICS" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="grantClearance">Required Clearance</label>
+                <input type="number" id="grantClearance" class="form-control" value="3" min="1" max="5" required />
+              </div>
+            </div>
+
+            <div style="text-align: right; margin-top: 10px;">
+              <button type="submit" class="btn btn-primary">
+                Anchor Access Grant on Blockchain
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Active Grants Table -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="padding: 14px 18px; border-bottom: 1px solid var(--border); background: #f8fafc;">
+            <strong style="color: var(--color-header);">Active Resource Access Grants</strong>
+          </div>
+          <div class="table-container" style="border: none; border-radius: 0;">
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Resource</th>
+                  <th>Clearance Requirement</th>
+                  <th>Subject DID</th>
+                  <th>Granted By</th>
+                  <th>Block Anchor</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="grantsTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">Loading active grants...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/access.js"></script>
+  <script>
+    function updatePresetClearance(select) {
+      const selectedOption = select.options[select.selectedIndex];
+      if (selectedOption && selectedOption.dataset.lvl) {
+        document.getElementById('requestClearance').value = selectedOption.dataset.lvl;
+      }
+    }
+  </script>
+</body>
+</html>

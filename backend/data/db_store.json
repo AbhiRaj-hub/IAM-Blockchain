@@ -1,0 +1,209 @@
+{
+  "users": [
+    {
+      "_id": "user_admin_001",
+      "name": "Chief Security Officer",
+      "email": "admin@bel.co.in",
+      "password": "Admin@123",
+      "role": "ADMIN",
+      "clearanceLevel": 5,
+      "did": "did:bel:admin001",
+      "status": "ACTIVE",
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "user_admin_002",
+      "name": "Chief Security Officer",
+      "email": "admin@shieldx.io",
+      "password": "Admin@123",
+      "role": "ADMIN",
+      "clearanceLevel": 5,
+      "did": "did:bel:admin001",
+      "status": "ACTIVE",
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "user_mgr_003",
+      "name": "Defense Systems Manager",
+      "email": "manager@bel.co.in",
+      "password": "Manager@123",
+      "role": "ADMIN",
+      "clearanceLevel": 4,
+      "did": "did:bel:mgr002",
+      "status": "ACTIVE",
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "user_mgr_004",
+      "name": "Defense Systems Manager",
+      "email": "manager@shieldx.io",
+      "password": "Manager@123",
+      "role": "ADMIN",
+      "clearanceLevel": 4,
+      "did": "did:bel:mgr002",
+      "status": "ACTIVE",
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "user_emp_005",
+      "name": "Vikram Singh (Engineer)",
+      "email": "employee@bel.co.in",
+      "password": "Employee@123",
+      "role": "EMPLOYEE",
+      "clearanceLevel": 2,
+      "did": "did:bel:emp003",
+      "status": "ACTIVE",
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "user_emp_006",
+      "name": "Vikram Singh (Engineer)",
+      "email": "employee@shieldx.io",
+      "password": "Employee@123",
+      "role": "EMPLOYEE",
+      "clearanceLevel": 4,
+      "did": "did:bel:9f367f159d154cac",
+      "status": "ACTIVE",
+      "createdAt": "2026-08-24T12:00:00.000Z",
+      "updatedAt": "2026-08-24T13:07:56.607Z"
+    },
+    {
+      "_id": "user_aud_007",
+      "name": "Defense Systems Auditor",
+      "email": "auditor@bel.co.in",
+      "password": "Auditor@123",
+      "role": "AUDITOR",
+      "clearanceLevel": 3,
+      "did": "did:bel:aud004",
+      "status": "ACTIVE",
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "user_aud_008",
+      "name": "Defense Systems Auditor",
+      "email": "auditor@shieldx.io",
+      "password": "Auditor@123",
+      "role": "AUDITOR",
+      "clearanceLevel": 3,
+      "did": "did:bel:aud004",
+      "status": "ACTIVE",
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    }
+  ],
+  "identities": [
+    {
+      "_id": "id_001",
+      "did": "did:bel:admin001",
+      "credentialId": "cred-bel-admin-01",
+      "subjectName": "Chief Security Officer",
+      "role": "ADMIN",
+      "clearanceLevel": 5,
+      "issuer": "BEL-Authority",
+      "status": "ACTIVE",
+      "blockchainBlockIndex": 0,
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "id_002",
+      "did": "did:bel:mgr002",
+      "credentialId": "cred-bel-mgr-02",
+      "subjectName": "Defense Systems Manager",
+      "role": "ADMIN",
+      "clearanceLevel": 4,
+      "issuer": "BEL-Authority",
+      "status": "ACTIVE",
+      "blockchainBlockIndex": 0,
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "id_003",
+      "did": "did:bel:emp003",
+      "credentialId": "cred-bel-emp-03",
+      "subjectName": "Vikram Singh (Engineer)",
+      "role": "EMPLOYEE",
+      "clearanceLevel": 2,
+      "issuer": "BEL-Authority",
+      "status": "ACTIVE",
+      "blockchainBlockIndex": 0,
+      "createdAt": "2026-08-24T12:00:00.000Z"
+    },
+    {
+      "_id": "doc_1787576876604_3suare",
+      "did": "did:bel:9f367f159d154cac",
+      "userId": "user_emp_006",
+      "credentialId": "cred-e81c3c1f8f",
+      "subjectName": "Vikram Singh (Engineer)",
+      "role": "EMPLOYEE",
+      "clearanceLevel": 4,
+      "issuer": "BEL-Authority",
+      "status": "ACTIVE",
+      "blockchainBlockIndex": 1,
+      "createdAt": "2026-08-24T13:07:56.604Z",
+      "updatedAt": "2026-08-24T13:07:56.604Z"
+    }
+  ],
+  "access_grants": [
+    {
+      "_id": "grant_001",
+      "grantId": "grant-bel-01",
+      "did": "did:bel:emp003",
+      "resource": "GENERAL_CAMPUS_BULLETIN",
+      "requiredClearance": 1,
+      "grantedBy": "BEL-Authority",
+      "status": "REVOKED",
+      "blockchainBlockIndex": 0,
+      "createdAt": "2026-08-24T12:00:00.000Z",
+      "updatedAt": "2026-08-24T13:17:31.783Z"
+    }
+  ],
+  "access_logs": [
+    {
+      "_id": "doc_1787577010659_domkk2",
+      "did": "did:bel:emp003",
+      "resource": "GENERAL_CAMPUS_BULLETIN",
+      "decision": "ALLOWED",
+      "reason": "Clearance level 2 satisfies requirement 1",
+      "blockchainBlockIndex": 3,
+      "timestamp": "2026-08-24T13:10:10.658Z",
+      "createdAt": "2026-08-24T13:10:10.659Z",
+      "updatedAt": "2026-08-24T13:10:10.659Z"
+    },
+    {
+      "_id": "doc_1787577445620_fc7btf",
+      "did": "did:bel:admin001",
+      "resource": "GENERAL_CAMPUS_BULLETIN",
+      "decision": "ALLOWED",
+      "reason": "Clearance level 5 satisfies requirement 1",
+      "blockchainBlockIndex": 5,
+      "timestamp": "2026-08-24T13:17:25.620Z",
+      "createdAt": "2026-08-24T13:17:25.620Z",
+      "updatedAt": "2026-08-24T13:17:25.620Z"
+    }
+  ],
+  "assets": [
+    {
+      "_id": "doc_1787576908362_a8jjqg",
+      "assetId": "asset-d4218c303a",
+      "filename": "4298.jpg",
+      "version": 1,
+      "sha256": "fa682ecd9bd2e9979adec47890247db229130804692d2719a832ae8433169dc4",
+      "ownerDid": "did:bel:mgr002",
+      "storagePath": "D:\\Web Development\\ShieldX\\SIH-2026\\backend\\uploads\\1787576908338-451385503-4298.jpg",
+      "blockchainBlockIndex": 2,
+      "createdAt": "2026-08-24T13:08:28.362Z",
+      "updatedAt": "2026-08-24T13:08:28.362Z"
+    },
+    {
+      "_id": "doc_1787577340879_fgw6ak",
+      "assetId": "asset-f69d9669a4",
+      "filename": "4298.jpg",
+      "version": 1,
+      "sha256": "fa682ecd9bd2e9979adec47890247db229130804692d2719a832ae8433169dc4",
+      "ownerDid": "did:bel:admin001",
+      "storagePath": "D:\\Web Development\\ShieldX\\SIH-2026\\backend\\uploads\\1787577340849-353491599-4298.jpg",
+      "blockchainBlockIndex": 4,
+      "createdAt": "2026-08-24T13:15:40.879Z",
+      "updatedAt": "2026-08-24T13:15:40.879Z"
+    }
+  ]
+}

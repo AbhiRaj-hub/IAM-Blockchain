@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Asset Tokens & Integrity | BEL TrustChain</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <h2>🛡️ BEL TrustChain</h2>
+        <span class="subtext">By Team ShieldX</span>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html">📊 Dashboard</a></li>
+        <li><a href="identity.html">🆔 Identity (DID)</a></li>
+        <li><a href="access-control.html">🛡️ Access Control</a></li>
+        <li><a href="assets.html" class="active">📄 Asset Tokens</a></li>
+        <li><a href="audit.html">📜 Audit Ledger</a></li>
+      </ul>
+
+      <div class="sidebar-user">
+        <div class="user-title" id="navbarUserName">Loading...</div>
+        <div class="user-subtitle" id="navbarUserRole">ROLE</div>
+        <div id="navbarUserDid" style="font-size: 0.72rem; color: #93c5fd; word-break: break-all; margin-bottom: 8px;"></div>
+        <button class="btn btn-secondary btn-sm" style="width: 100%; background: #1e3a5f; color: #ffffff; border-color: #3b82f6;" onclick="logout()">Sign Out</button>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="main-topbar">
+        <div class="page-heading">
+          <h1>Digital Asset Management & Tokenization</h1>
+          <p>Off-chain file storage with on-chain cryptographic SHA-256 token ownership allocated to DIDs</p>
+        </div>
+        <div>
+          <button class="btn btn-secondary btn-sm" onclick="loadAssets()">🔄 Refresh</button>
+        </div>
+      </header>
+
+      <div class="main-body">
+        <div id="assetAlert" class="alert alert-success"></div>
+
+        <!-- Upload File Box -->
+        <div class="card">
+          <h3 style="margin-bottom: 16px; color: var(--color-header);">Mint & Allocate Digital Asset Token to DID</h3>
+          <form id="uploadAssetForm">
+            <div style="display: grid; grid-template-columns: 3fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="assetFileInput">Attach Sensitive Document / Schematic (PDF, TXT, CAD, etc.)</label>
+                <input type="file" id="assetFileInput" class="form-control" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="assetVersion">Asset Version</label>
+                <input type="number" id="assetVersion" class="form-control" value="1" min="1" />
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 0.85rem; color: var(--text-muted);">
+                Files are stored off-chain. The unique <strong>SHA-256 token</strong> is anchored to the owner's DID on the blockchain.
+              </span>
+              <button type="submit" id="uploadSubmitBtn" class="btn btn-primary">
+                ⚡ Mint Token & Anchor SHA-256
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Verification Result (Hidden until Verify Integrity is clicked) -->
+        <div id="verifyResultBox" class="result-callout" style="display: none; margin-bottom: 24px; padding: 18px; border-radius: 8px;">
+          <strong id="verifyResultTitle" style="font-size: 1.05rem; display: block; margin-bottom: 6px;"></strong>
+          <div id="verifyResultText" style="margin-bottom: 12px; font-size: 0.92rem;"></div>
+          <div style="font-size: 0.85rem; display: grid; gap: 8px; background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08);">
+            <div><strong>Blockchain Expected SHA-256:</strong> <span id="verifyHashExpected" class="hash-text" style="font-size: 0.85rem; word-break: break-all;">-</span></div>
+            <div><strong>Computed Current File SHA-256:</strong> <span id="verifyHashCurrent" class="hash-text" style="font-size: 0.85rem; word-break: break-all;">-</span></div>
+          </div>
+        </div>
+
+        <!-- Assets Table -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="padding: 14px 18px; border-bottom: 1px solid var(--border); background: #f8fafc;">
+            <strong style="color: var(--color-header);">Allocated Digital Asset Tokens</strong>
+          </div>
+          <div class="table-container" style="border: none; border-radius: 0;">
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Filename</th>
+                  <th>Version</th>
+                  <th>On-Chain SHA-256 Hash</th>
+                  <th>Block Anchor</th>
+                  <th>Allocated Owner DID</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="assetsTableBody">
+                <tr>
+                  <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Loading digital assets...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/assets.js"></script>
+</body>
+</html>

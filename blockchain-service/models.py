@@ -7,7 +7,7 @@ def _new_id(prefix: str) -> str:
 
 
 def issue_identity(subject_name: str, role: str, clearance_level: int, issuer: str = "BEL-Authority") -> dict:
-    did = f"did:bel:{uuid.uuid4().hex}"
+    did = f"did:bel:{uuid.uuid4().hex[:16]}"
     return {
         "type": "IDENTITY_ISSUE",
         "timestamp": time.time(),
@@ -35,7 +35,7 @@ def revoke_identity(did: str, reason: str, issuer: str = "BEL-Authority") -> dic
     }
 
 
-def grant_access(did: str, resource: str, required_clearance: int, granted_by: str) -> dict:
+def grant_access(did: str, resource: str, required_clearance: int, granted_by: str = "BEL-Authority") -> dict:
     return {
         "type": "ACCESS_GRANT",
         "timestamp": time.time(),
@@ -49,7 +49,7 @@ def grant_access(did: str, resource: str, required_clearance: int, granted_by: s
     }
 
 
-def revoke_access(grant_id: str, did: str, resource: str, revoked_by: str) -> dict:
+def revoke_access(grant_id: str, did: str, resource: str, revoked_by: str = "BEL-Authority") -> dict:
     return {
         "type": "ACCESS_REVOKE",
         "timestamp": time.time(),

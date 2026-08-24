@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | BEL TrustChain</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <div>
+        <div class="brand-logo">🛡️ BEL TrustChain</div>
+        <span class="brand-sub">Identity, Access Control & Asset Platform | Team ShieldX</span>
+      </div>
+      <div>
+        <a href="index.html" class="btn btn-secondary btn-sm" style="background: transparent; color: #ffffff; border-color: rgba(255,255,255,0.3);">Home</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="auth-wrapper">
+    <div class="auth-box">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h1 id="formTitle">Sign In</h1>
+        <p id="formSubtitle">BEL TrustChain Platform</p>
+      </div>
+
+      <div id="authAlert" class="alert alert-danger"></div>
+
+      <form id="authForm">
+        <div class="form-group" id="nameGroup" style="display: none;">
+          <label class="form-label" for="userName">Full Name</label>
+          <input type="text" id="userName" class="form-control" placeholder="e.g. Vikram Singh" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="userEmail">Email Address</label>
+          <input type="email" id="userEmail" class="form-control" placeholder="admin@bel.co.in" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="userPassword">Password</label>
+          <input type="password" id="userPassword" class="form-control" placeholder="••••••••" required />
+        </div>
+
+        <div class="form-group" id="roleGroup" style="display: none;">
+          <label class="form-label" for="userRole">Role & Security Clearance</label>
+          <select id="userRole" class="form-control">
+            <option value="EMPLOYEE">EMPLOYEE (Clearance Level 2)</option>
+            <option value="ADMIN">ADMIN (Clearance Level 5)</option>
+            <option value="AUDITOR">AUDITOR (Clearance Level 3)</option>
+          </select>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+          Sign In
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 16px; font-size: 0.88rem; color: var(--text-muted);">
+        <span id="toggleText">Need an account?</span>
+        <a href="#" id="toggleAuthMode" style="font-weight: 600; margin-left: 4px;">Register New User</a>
+      </div>
+
+      <!-- 1-Click Demo Personas -->
+      <div class="demo-box">
+        <div class="demo-title">🚀 1-Click Demo Personas</div>
+        <div class="demo-buttons">
+          <button type="button" class="demo-btn" onclick="fillPersona('admin@bel.co.in', 'Admin@123', 'ADMIN')">Admin (L5)</button>
+          <button type="button" class="demo-btn" onclick="fillPersona('manager@bel.co.in', 'Manager@123', 'ADMIN')">Manager (L4)</button>
+          <button type="button" class="demo-btn" onclick="fillPersona('employee@bel.co.in', 'Employee@123', 'EMPLOYEE')">Employee (L2)</button>
+          <button type="button" class="demo-btn" onclick="fillPersona('auditor@bel.co.in', 'Auditor@123', 'AUDITOR')">Auditor (L3)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    let isRegisterMode = false;
+
+    const authForm = document.getElementById('authForm');
+    const toggleAuthMode = document.getElementById('toggleAuthMode');
+    const nameGroup = document.getElementById('nameGroup');
+    const roleGroup = document.getElementById('roleGroup');
+    const formTitle = document.getElementById('formTitle');
+    const formSubtitle = document.getElementById('formSubtitle');
+    const submitBtn = document.getElementById('submitBtn');
+    const toggleText = document.getElementById('toggleText');
+    const authAlert = document.getElementById('authAlert');
+
+    toggleAuthMode.addEventListener('click', (e) => {
+      e.preventDefault();
+      isRegisterMode = !isRegisterMode;
+      authAlert.style.display = 'none';
+
+      if (isRegisterMode) {
+        formTitle.textContent = 'Create Account';
+        formSubtitle.textContent = 'Register new user for on-chain identity allocation';
+        submitBtn.textContent = 'Register User';
+        toggleText.textContent = 'Already have an account?';
+        toggleAuthMode.textContent = 'Sign In';
+        nameGroup.style.display = 'block';
+        roleGroup.style.display = 'block';
+      } else {
+        formTitle.textContent = 'Sign In';
+        formSubtitle.textContent = 'BEL TrustChain Platform';
+        submitBtn.textContent = 'Sign In';
+        toggleText.textContent = 'Need an account?';
+        toggleAuthMode.textContent = 'Register New User';
+        nameGroup.style.display = 'none';
+        roleGroup.style.display = 'none';
+      }
+    });
+
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      authAlert.style.display = 'none';
+
+      const email = document.getElementById('userEmail').value.trim();
+      const password = document.getElementById('userPassword').value;
+      const name = document.getElementById('userName').value.trim();
+      const role = document.getElementById('userRole').value;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Authenticating...';
+
+      const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
+      const payload = isRegisterMode
+        ? { name: name || email.split('@')[0], email, password, role }
+        : { email, password };
+
+      const res = await apiRequest(endpoint, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = isRegisterMode ? 'Register User' : 'Sign In';
+
+      if (res.ok && res.data.success) {
+        localStorage.setItem('sih_token', res.data.data.token);
+        localStorage.setItem('sih_user', JSON.stringify(res.data.data.user));
+        window.location.href = 'dashboard.html';
+      } else {
+        authAlert.className = 'alert alert-danger';
+        authAlert.textContent = res.data.message || 'Authentication failed.';
+        authAlert.style.display = 'block';
+      }
+    });
+
+    function fillPersona(email, password, role) {
+      document.getElementById('userEmail').value = email;
+      document.getElementById('userPassword').value = password;
+      if (isRegisterMode) {
+        document.getElementById('userName').value = email.split('@')[0].toUpperCase();
+        document.getElementById('userRole').value = role;
+      }
+      authAlert.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

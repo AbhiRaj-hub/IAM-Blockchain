@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Immutable Audit Ledger | BEL TrustChain</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <h2>🛡️ BEL TrustChain</h2>
+        <span class="subtext">By Team ShieldX</span>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html">📊 Dashboard</a></li>
+        <li><a href="identity.html">🆔 Identity (DID)</a></li>
+        <li><a href="access-control.html">🛡️ Access Control</a></li>
+        <li><a href="assets.html">📄 Asset Tokens</a></li>
+        <li><a href="audit.html" class="active">📜 Audit Ledger</a></li>
+      </ul>
+
+      <div class="sidebar-user">
+        <div class="user-title" id="navbarUserName">Loading...</div>
+        <div class="user-subtitle" id="navbarUserRole">ROLE</div>
+        <div id="navbarUserDid" style="font-size: 0.72rem; color: #93c5fd; word-break: break-all; margin-bottom: 8px;"></div>
+        <button class="btn btn-secondary btn-sm" style="width: 100%; background: #1e3a5f; color: #ffffff; border-color: #3b82f6;" onclick="logout()">Sign Out</button>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="main-topbar">
+        <div class="page-heading">
+          <h1>Immutable Security Audit Trail</h1>
+          <p>Cryptographically verifiable transaction logs and access clearance decisions</p>
+        </div>
+        <div>
+          <button id="validateChainBtn" class="btn btn-primary btn-sm">🔒 Validate Full Blockchain</button>
+        </div>
+      </header>
+
+      <div class="main-body">
+        <!-- Validation Result -->
+        <div id="chainValidateResult" class="result-callout" style="margin-bottom: 20px;"></div>
+
+        <!-- Filter Box -->
+        <div class="card" style="padding: 16px;">
+          <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+            <div class="form-group" style="margin-bottom: 0; flex: 2; min-width: 180px;">
+              <label class="form-label" for="filterDid">Filter by Subject DID</label>
+              <input type="text" id="filterDid" class="form-control" placeholder="did:bel:..." />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 140px;">
+              <label class="form-label" for="filterDecision">Decision</label>
+              <select id="filterDecision" class="form-control">
+                <option value="">All Decisions</option>
+                <option value="ALLOWED">ALLOWED Only</option>
+                <option value="DENIED">DENIED Only</option>
+              </select>
+            </div>
+
+            <button id="applyFilterBtn" class="btn btn-secondary">
+              🔍 Filter Records
+            </button>
+          </div>
+        </div>
+
+        <!-- Audit Table -->
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 24px;">
+          <div style="padding: 14px 18px; border-bottom: 1px solid var(--border); background: #f8fafc;">
+            <strong style="color: var(--color-header);">Access Decisions (Indexed Audit Log)</strong>
+          </div>
+          <div class="table-container" style="border: none; border-radius: 0;">
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Subject DID</th>
+                  <th>Resource</th>
+                  <th>Decision</th>
+                  <th>Evaluation Reason</th>
+                  <th>Mined Block</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody">
+                <tr>
+                  <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Loading audit records...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Raw Blockchain Stream -->
+        <div class="card" style="padding: 16px;">
+          <h3 style="margin-bottom: 12px; color: var(--color-header);">Raw Blockchain Transactions (Direct Ledger Stream)</h3>
+          <div id="onChainTxList">
+            <p style="color: var(--text-muted);">Loading raw blocks...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/audit.js"></script>
+</body>
+</html>

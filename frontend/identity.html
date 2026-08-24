@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decentralized Identity (DID) | BEL TrustChain</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <h2>🛡️ BEL TrustChain</h2>
+        <span class="subtext">By Team ShieldX</span>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html">📊 Dashboard</a></li>
+        <li><a href="identity.html" class="active">🆔 Identity (DID)</a></li>
+        <li><a href="access-control.html">🛡️ Access Control</a></li>
+        <li><a href="assets.html">📄 Asset Tokens</a></li>
+        <li><a href="audit.html">📜 Audit Ledger</a></li>
+      </ul>
+
+      <div class="sidebar-user">
+        <div class="user-title" id="navbarUserName">Loading...</div>
+        <div class="user-subtitle" id="navbarUserRole">ROLE</div>
+        <div id="navbarUserDid" style="font-size: 0.72rem; color: #93c5fd; word-break: break-all; margin-bottom: 8px;"></div>
+        <button class="btn btn-secondary btn-sm" style="width: 100%; background: #1e3a5f; color: #ffffff; border-color: #3b82f6;" onclick="logout()">Sign Out</button>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="main-topbar">
+        <div class="page-heading">
+          <h1>Decentralized Identity (DID) Registry</h1>
+          <p>Cryptographic identity issuance, clearance tier assignment, and on-chain revocation</p>
+        </div>
+        <div>
+          <button class="btn btn-secondary btn-sm" onclick="loadIdentities()">🔄 Refresh</button>
+        </div>
+      </header>
+
+      <div class="main-body">
+        <div id="identityAlert" class="alert alert-success"></div>
+
+        <!-- Issue Identity Panel -->
+        <div class="card admin-only">
+          <h3 style="margin-bottom: 16px; color: var(--color-header);">Issue New On-Chain Identity Credential</h3>
+          <form id="issueIdentityForm">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="selectUser">Bind to User Account</label>
+                <select id="selectUser" class="form-control">
+                  <option value="">-- Select Registered User --</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="subjectName">Subject Full Name</label>
+                <input type="text" id="subjectName" class="form-control" placeholder="e.g. Vikram Singh" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="role">Security Role</label>
+                <select id="role" class="form-control">
+                  <option value="EMPLOYEE">EMPLOYEE</option>
+                  <option value="ADMIN">ADMIN</option>
+                  <option value="AUDITOR">AUDITOR</option>
+                  <option value="OFFICER">OFFICER</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="clearanceLevel">Clearance Level (1 to 5)</label>
+                <select id="clearanceLevel" class="form-control">
+                  <option value="1">Level 1 - Public</option>
+                  <option value="2" selected>Level 2 - Confidential</option>
+                  <option value="3">Level 3 - Secret</option>
+                  <option value="4">Level 4 - Top Secret</option>
+                  <option value="5">Level 5 - Command</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="issuer">Issuing Authority</label>
+                <input type="text" id="issuer" class="form-control" value="BEL-Authority" />
+              </div>
+            </div>
+
+            <div style="text-align: right; margin-top: 10px;">
+              <button type="submit" id="issueSubmitBtn" class="btn btn-primary">
+                ⚡ Issue Identity & Mine Block
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Identities Table -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="padding: 14px 18px; border-bottom: 1px solid var(--border); background: #f8fafc;">
+            <strong style="color: var(--color-header);">Decentralized Identities (Indexed Registry)</strong>
+          </div>
+          <div class="table-container" style="border: none; border-radius: 0;">
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Subject Name</th>
+                  <th>DID Identifier</th>
+                  <th>Role</th>
+                  <th>Clearance</th>
+                  <th>Credential ID</th>
+                  <th>Block Anchor</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="identitiesTableBody">
+                <tr>
+                  <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 20px;">Loading on-chain identities...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/identity.js"></script>
+</body>
+</html>

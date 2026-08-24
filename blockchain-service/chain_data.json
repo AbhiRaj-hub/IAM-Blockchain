@@ -1,0 +1,137 @@
+[
+  {
+    "index": 0,
+    "timestamp": 1724500000.0,
+    "transactions": [
+      {
+        "payload": {
+          "message": "Genesis Block - ShieldX Platform Initialized"
+        },
+        "timestamp": 1724500000.0,
+        "type": "GENESIS"
+      }
+    ],
+    "previous_hash": "0",
+    "nonce": 0,
+    "hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "index": 1,
+    "timestamp": 1787576876.6012664,
+    "transactions": [
+      {
+        "type": "IDENTITY_ISSUE",
+        "timestamp": 1787576876.6012275,
+        "payload": {
+          "credential_id": "cred-e81c3c1f8f",
+          "did": "did:bel:9f367f159d154cac",
+          "subject_name": "Vikram Singh (Engineer)",
+          "role": "EMPLOYEE",
+          "clearance_level": 4,
+          "issuer": "BEL-Authority",
+          "status": "ACTIVE"
+        }
+      }
+    ],
+    "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "nonce": 358,
+    "hash": "0008df699c8b9f905e6958484012cb36cde59d9f79fce8e34f85e0b8bb870aba"
+  },
+  {
+    "index": 2,
+    "timestamp": 1787576908.358006,
+    "transactions": [
+      {
+        "type": "ASSET_ANCHOR",
+        "timestamp": 1787576908.3579447,
+        "payload": {
+          "asset_id": "asset-d4218c303a",
+          "filename": "4298.jpg",
+          "version": 1,
+          "sha256": "fa682ecd9bd2e9979adec47890247db229130804692d2719a832ae8433169dc4",
+          "owner_did": "did:bel:mgr002"
+        }
+      }
+    ],
+    "previous_hash": "0008df699c8b9f905e6958484012cb36cde59d9f79fce8e34f85e0b8bb870aba",
+    "nonce": 148,
+    "hash": "004341d93c43b168e6ef51d2ab0bc4c3c59239119c0c63d3295b4e55de1eac11"
+  },
+  {
+    "index": 3,
+    "timestamp": 1787577010.6620886,
+    "transactions": [
+      {
+        "type": "ACCESS_ATTEMPT",
+        "timestamp": 1787577010.6620822,
+        "payload": {
+          "did": "did:bel:emp003",
+          "resource": "GENERAL_CAMPUS_BULLETIN",
+          "decision": "ALLOWED",
+          "reason": "Clearance level 2 satisfies requirement 1"
+        }
+      }
+    ],
+    "previous_hash": "004341d93c43b168e6ef51d2ab0bc4c3c59239119c0c63d3295b4e55de1eac11",
+    "nonce": 109,
+    "hash": "0068ab0dc559e48676cb285a2c227217aabf4d0c11a3253beb91f37f95c80eb5"
+  },
+  {
+    "index": 4,
+    "timestamp": 1787577340.876494,
+    "transactions": [
+      {
+        "type": "ASSET_ANCHOR",
+        "timestamp": 1787577340.8764508,
+        "payload": {
+          "asset_id": "asset-f69d9669a4",
+          "filename": "4298.jpg",
+          "version": 1,
+          "sha256": "fa682ecd9bd2e9979adec47890247db229130804692d2719a832ae8433169dc4",
+          "owner_did": "did:bel:admin001"
+        }
+      }
+    ],
+    "previous_hash": "0068ab0dc559e48676cb285a2c227217aabf4d0c11a3253beb91f37f95c80eb5",
+    "nonce": 121,
+    "hash": "006557029c1553364697c20a9b32b3d97b6ff252ebe9c25c8c2a586bd32b0c01"
+  },
+  {
+    "index": 5,
+    "timestamp": 1787577445.6195042,
+    "transactions": [
+      {
+        "type": "ACCESS_ATTEMPT",
+        "timestamp": 1787577445.619491,
+        "payload": {
+          "did": "did:bel:admin001",
+          "resource": "GENERAL_CAMPUS_BULLETIN",
+          "decision": "ALLOWED",
+          "reason": "Clearance level 5 satisfies requirement 1"
+        }
+      }
+    ],
+    "previous_hash": "006557029c1553364697c20a9b32b3d97b6ff252ebe9c25c8c2a586bd32b0c01",
+    "nonce": 33,
+    "hash": "00cd8468e284899cf1b57fbfbf534a16200cbf400410493c95f646543d2856cd"
+  },
+  {
+    "index": 6,
+    "timestamp": 1787577451.773862,
+    "transactions": [
+      {
+        "type": "ACCESS_REVOKE",
+        "timestamp": 1787577451.7738535,
+        "payload": {
+          "grant_id": "grant-bel-01",
+          "did": "did:bel:emp003",
+          "resource": "GENERAL_CAMPUS_BULLETIN",
+          "revoked_by": "Chief Security Officer"
+        }
+      }
+    ],
+    "previous_hash": "00cd8468e284899cf1b57fbfbf534a16200cbf400410493c95f646543d2856cd",
+    "nonce": 1021,
+    "hash": "00d378344d60808ea1a251bc53abf27f0fdc4ed8590752ee0af11cd30bc24123"
+  }
+]

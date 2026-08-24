@@ -28,29 +28,38 @@ def main():
 
     # ---------- 2. Access grant ----------
     section("2. Granting access to a restricted resource")
-    grant_tx = models.grant_access(did=did, resource="lab-3-restricted-docs", required_clearance=3, granted_by="BEL-Authority")
+    grant_tx = models.grant_access(did=did, resource="lab-3-restricted-docs", required_clearance=3, granted_by="System-Authority")
     chain.add_transaction(grant_tx)
-    block = chain.mine_pending_transactions()
-    print(f"Granted access to 'lab-3-restricted-docs' for {did}")
-    print(f"Sealed in block #{block.index}")
+    mined_block = chain.mine_pending_transactions()
+    print(f"Mined in block #{mined_block.index}")
 
-    # ---------- 3. Access check (should be ALLOWED) ----------
-    section("3. Employee attempts to access the resource")
-    events = chain.find_transaction(lambda tx: tx["type"] == "ACCESS_GRANT" and tx["payload"]["did"] == did)
-    decision = "ALLOWED" if events else "DENIED"
-    log_tx = models.log_access_attempt(did, "lab-3-restricted-docs", decision)
-    chain.add_transaction(log_tx)
-    chain.mine_pending_transactions()
-    print(f"Access decision: {decision} (now permanently logged on-chain)")
+    # 4. Check access
+    section("4. Evaluating access for the employee")
+    # Clearance check on a level-2 resource (allowed)
+    allowed_tx = models.log_access_attempt(did=did, resource="campus-bulletin", decision="ALLOWED")
+    chain.add_transaction(allowed_tx)
+    # Clearance check on a level-5 resource (denied)
+    denied_tx = models.log_access_attempt(did=did, resource="classified-project-x", decision="DENIED")
+    chain.add_transaction(denied_tx)
+    mined_block = chain.mine_pending_transactions()
+    print(f"Access attempts mined in block #{mined_block.index}")
 
-    # ---------- 4. Asset anchoring ----------
-    section("4. Uploading and anchoring a digital asset")
-    fake_document = b"CLASSIFIED: Project blueprint v1 contents go here..."
-    asset_tx = models.anchor_asset(file_bytes=fake_document, owner_did=did, filename="blueprint_v1.pdf")
+    # 5. Anchor a digital asset
+    section("5. Anchoring a sensitive PDF/asset")
+    fake_pdf = b"%PDF-1.4 ... fake binary payload for sensitive schematic ..."
+    asset_tx = models.anchor_asset(
+        file_bytes=fake_pdf,
+        owner_did=did,
+        filename="radar_defense_schematic_v1.pdf",
+        version=1
+    )
     chain.add_transaction(asset_tx)
-    block = chain.mine_pending_transactions()
-    print(f"Asset anchored. SHA-256 = {asset_tx['payload']['sha256']}")
-    print(f"Sealed in block #{block.index}")
+    mined_block = chain.mine_pending_transactions()
+    print(f"Asset anchored in block #{mined_block.index}")
+    print(f"SHA-256 Digest: {asset_tx['payload']['sha256']}")
+
+    # 6. Revoking identity
+    section("6. Revoking the employee's identity (e.g., policy update)")
 
     # ---------- 5. Verify asset integrity later ----------
     section("5. Later: verifying the asset hasn't been tampered with")
@@ -62,7 +71,7 @@ def main():
     print(f"Integrity check on tampered file:   {still_intact_after_tamper}")
 
     # ---------- 6. Revoke identity, show access is now denied ----------
-    section("6. Revoking the employee's identity (e.g., they've left BEL)")
+    section("6. Revoking the employee's identity (e.g., policy update)")
     revoke_tx = models.revoke_identity(did=did, reason="Employee offboarded")
     chain.add_transaction(revoke_tx)
     chain.mine_pending_transactions()
