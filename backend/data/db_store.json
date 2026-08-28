@@ -7,9 +7,10 @@
       "password": "Admin@123",
       "role": "ADMIN",
       "clearanceLevel": 5,
-      "did": "did:bel:admin001",
+      "did": "did:bel:9432a0c3f1034318",
       "status": "ACTIVE",
-      "createdAt": "2026-08-24T12:00:00.000Z"
+      "createdAt": "2026-08-24T12:00:00.000Z",
+      "updatedAt": "2026-08-28T17:49:13.426Z"
     },
     {
       "_id": "user_admin_002",
@@ -140,6 +141,20 @@
       "blockchainBlockIndex": 1,
       "createdAt": "2026-08-24T13:07:56.604Z",
       "updatedAt": "2026-08-24T13:07:56.604Z"
+    },
+    {
+      "_id": "doc_1787939353424_qhswzg",
+      "did": "did:bel:9432a0c3f1034318",
+      "userId": "user_admin_001",
+      "credentialId": "cred-d346a6bdcd",
+      "subjectName": "Chief Security Officer",
+      "role": "ADMIN",
+      "clearanceLevel": 5,
+      "issuer": "BEL-Authority",
+      "status": "REVOKED",
+      "blockchainBlockIndex": 8,
+      "createdAt": "2026-08-28T17:49:13.424Z",
+      "updatedAt": "2026-08-28T17:58:49.441Z"
     }
   ],
   "access_grants": [
@@ -204,6 +219,18 @@
       "blockchainBlockIndex": 4,
       "createdAt": "2026-08-24T13:15:40.879Z",
       "updatedAt": "2026-08-24T13:15:40.879Z"
+    },
+    {
+      "_id": "doc_1787939248833_3j485u",
+      "assetId": "asset-ed60c7b287",
+      "filename": "Unit-1-Intro-DOS-SCR (1).pptx",
+      "version": 1,
+      "sha256": "efe1245cea6b32e9c0e387e51263814d0b3b56ad81bc468944c1f77f7d82c877",
+      "ownerDid": "did:bel:admin001",
+      "storagePath": "D:\\Web Development\\ShieldX\\SIH-2026\\backend\\uploads\\1787939248777-308343809-Unit-1-Intro-DOS-SCR (1).pptx",
+      "blockchainBlockIndex": 7,
+      "createdAt": "2026-08-28T17:47:28.833Z",
+      "updatedAt": "2026-08-28T17:47:28.833Z"
     }
   ]
 }

@@ -133,5 +133,65 @@
     "previous_hash": "00cd8468e284899cf1b57fbfbf534a16200cbf400410493c95f646543d2856cd",
     "nonce": 1021,
     "hash": "00d378344d60808ea1a251bc53abf27f0fdc4ed8590752ee0af11cd30bc24123"
+  },
+  {
+    "index": 7,
+    "timestamp": 1787939248.8275425,
+    "transactions": [
+      {
+        "type": "ASSET_ANCHOR",
+        "timestamp": 1787939248.827491,
+        "payload": {
+          "asset_id": "asset-ed60c7b287",
+          "filename": "Unit-1-Intro-DOS-SCR (1).pptx",
+          "version": 1,
+          "sha256": "efe1245cea6b32e9c0e387e51263814d0b3b56ad81bc468944c1f77f7d82c877",
+          "owner_did": "did:bel:admin001"
+        }
+      }
+    ],
+    "previous_hash": "00d378344d60808ea1a251bc53abf27f0fdc4ed8590752ee0af11cd30bc24123",
+    "nonce": 295,
+    "hash": "0054d4b2e65e35284c217134026fa268cd4cf3eecbbf0846038d576c40638451"
+  },
+  {
+    "index": 8,
+    "timestamp": 1787939353.40345,
+    "transactions": [
+      {
+        "type": "IDENTITY_ISSUE",
+        "timestamp": 1787939353.4034355,
+        "payload": {
+          "credential_id": "cred-d346a6bdcd",
+          "did": "did:bel:9432a0c3f1034318",
+          "subject_name": "Chief Security Officer",
+          "role": "ADMIN",
+          "clearance_level": 5,
+          "issuer": "BEL-Authority",
+          "status": "ACTIVE"
+        }
+      }
+    ],
+    "previous_hash": "0054d4b2e65e35284c217134026fa268cd4cf3eecbbf0846038d576c40638451",
+    "nonce": 1237,
+    "hash": "006319c5dd86ee3c0fc91d9086eecf5ca84ca713f704474499ee78fc674e285a"
+  },
+  {
+    "index": 9,
+    "timestamp": 1787939929.433916,
+    "transactions": [
+      {
+        "type": "IDENTITY_REVOKE",
+        "timestamp": 1787939929.4339032,
+        "payload": {
+          "did": "did:bel:9432a0c3f1034318",
+          "reason": "Security policy update",
+          "issuer": "Chief Security Officer"
+        }
+      }
+    ],
+    "previous_hash": "006319c5dd86ee3c0fc91d9086eecf5ca84ca713f704474499ee78fc674e285a",
+    "nonce": 194,
+    "hash": "00330fdbb965e4a041b1d4aa05f0641e360d7edc6336cb0d8196b6237b194164"
   }
 ]
