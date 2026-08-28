@@ -18,7 +18,7 @@ async function loadIdentities() {
   const tbody = document.getElementById('identitiesTableBody');
   if (!tbody) return;
 
-  tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 20px;">🔄 Syncing on-chain identities...</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 20px;">Syncing on-chain identities...</td></tr>`;
 
   try {
     const res = await apiRequest('/api/identity');
@@ -114,7 +114,7 @@ async function handleIssueIdentity(e) {
   });
 
   submitBtn.disabled = false;
-  submitBtn.textContent = '⚡ Issue Identity & Mine Block';
+  submitBtn.textContent = 'Issue Identity & Mine Block';
 
   if (res.ok && res.data && res.data.success) {
     alertEl.className = 'alert alert-success';

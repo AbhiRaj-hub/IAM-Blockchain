@@ -103,10 +103,10 @@ async function handleValidateChain() {
     const val = res.data.validation;
     if (val.valid) {
       resultBox.className = 'result-callout allowed';
-      resultBox.innerHTML = `<strong>✅ LEDGER INTEGRITY VALID:</strong> ${val.message} (Total ${res.data.blockHeight} blocks verified cryptographically).`;
+      resultBox.innerHTML = `<strong>LEDGER INTEGRITY VALID:</strong> ${val.message} (Total ${res.data.blockHeight} blocks verified cryptographically).`;
     } else {
       resultBox.className = 'result-callout denied';
-      resultBox.innerHTML = `<strong>⚠️ CRITICAL TAMPER ALERT:</strong> ${val.message}`;
+      resultBox.innerHTML = `<strong>CRITICAL TAMPER ALERT:</strong> ${val.message}`;
     }
   }
 }

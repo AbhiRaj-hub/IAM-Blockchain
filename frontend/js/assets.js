@@ -76,7 +76,7 @@ async function handleUploadAsset(e) {
   });
 
   submitBtn.disabled = false;
-  submitBtn.textContent = '⚡ Mint Token & Anchor SHA-256';
+  submitBtn.textContent = 'Mint Token & Anchor SHA-256';
 
   if (res.ok && res.data.success) {
     alertEl.className = 'alert alert-success';
@@ -100,7 +100,7 @@ async function handleVerifyAsset(assetId) {
 
   modalBox.style.display = 'block';
   modalBox.className = 'result-callout';
-  modalTitle.textContent = '🔍 Recalculating Disk SHA-256 & Querying Blockchain...';
+  modalTitle.textContent = 'Recalculating Disk SHA-256 & Querying Blockchain...';
   modalText.textContent = 'Validating cryptographic fingerprint against immutable block anchor...';
   modalHashExpected.textContent = 'Loading...';
   modalHashCurrent.textContent = 'Computing...';
@@ -113,11 +113,11 @@ async function handleVerifyAsset(assetId) {
     const d = res.data.data;
     if (d.integrityIntact) {
       modalBox.className = 'result-callout allowed';
-      modalTitle.textContent = '✅ FILE INTEGRITY VERIFIED (100% Authentic)';
+      modalTitle.textContent = 'FILE INTEGRITY VERIFIED (100% Authentic)';
       modalText.textContent = d.message;
     } else {
       modalBox.className = 'result-callout denied';
-      modalTitle.textContent = '⚠️ TAMPERING DETECTED! (Cryptographic Mismatch)';
+      modalTitle.textContent = 'TAMPERING DETECTED! (Cryptographic Mismatch)';
       modalText.textContent = d.message;
     }
 
@@ -125,7 +125,7 @@ async function handleVerifyAsset(assetId) {
     modalHashCurrent.textContent = d.currentHash;
   } else {
     modalBox.className = 'result-callout denied';
-    modalTitle.textContent = '⚠️ Verification Failed';
+    modalTitle.textContent = 'Verification Failed';
     modalText.textContent = res.data.message || 'Error communicating with asset verification engine.';
     modalHashExpected.textContent = 'N/A';
     modalHashCurrent.textContent = 'N/A';
