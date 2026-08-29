@@ -1,6 +1,6 @@
-# ShieldX — Blockchain Platform for Identity, Access Control & Asset Management
+Blockchain Platform for Identity, Access Control & Asset Management
 
-**ShieldX** is a full-stack, tamper-proof decentralized framework combining self-sovereign **Decentralized Identifiers (DIDs)**, **Role & Clearance-Based Access Control (RBAC)**, and **Cryptographic Digital Asset Tokenization** with an immutable blockchain ledger.
+Full-stack, tamper-proof decentralized framework combining self-sovereign **Decentralized Identifiers (DIDs)**, **Role & Clearance-Based Access Control (RBAC)**, and **Cryptographic Digital Asset Tokenization** with an immutable blockchain ledger.
 
 ---
 
